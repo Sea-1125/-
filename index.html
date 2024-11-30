@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adventure - 个人介绍</title>
+  <title>@Adventure - 个人介绍</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     /* 重置样式 */
@@ -33,37 +33,6 @@
       justify-content: space-between;
       align-items: center;
       transition: all 0.3s ease-in-out;
-    }
-
-    .music-player {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0, 188, 212, 0.1);
-      padding: 10px 15px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .music-player:hover {
-      background: rgba(0, 188, 212, 0.2);
-    }
-
-    .music-player i {
-      font-size: 20px;
-      color: #00e5ff;
-      transition: transform 0.3s ease;
-    }
-
-    .music-player:hover i {
-      transform: scale(1.2);
-    }
-
-    .music-player span {
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 500;
     }
 
     header nav a {
@@ -106,7 +75,7 @@
     }
 
     .hero p {
-      font-size: 18px;
+      font-size: 20px;
       color: #aaa;
       line-height: 1.6;
       max-width: 600px;
@@ -148,6 +117,43 @@
       color: #bbb;
     }
 
+    /* 音乐播放器 */
+    .music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 188, 212, 0.1);
+      padding: 15px 20px;
+      border-radius: 30px;
+      box-shadow: 0px 4px 20px rgba(0, 188, 212, 0.5);
+      z-index: 1001;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .music-player:hover {
+      background: rgba(0, 188, 212, 0.2);
+    }
+
+    .music-player i {
+      font-size: 24px;
+      color: #00e5ff;
+      transition: transform 0.3s ease;
+    }
+
+    .music-player:hover i {
+      transform: scale(1.2);
+    }
+
+    .music-player span {
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
     /* 动画效果 */
     @keyframes fadeIn {
       0% {
@@ -175,11 +181,6 @@
 <body>
   <!-- 顶部导航栏 -->
   <header>
-    <!-- 音乐播放器 -->
-    <div class="music-player" onclick="toggleMusic()">
-      <i id="music-icon" class="fa fa-play"></i>
-      <span id="music-status">播放《怎么办我想你》</span>
-    </div>
     <nav>
       <a href="#about">关于我</a>
       <a href="#contact">联系我</a>
@@ -190,10 +191,7 @@
   <section class="hero" id="about">
     <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="头像">
     <h2>@Adventure</h2>
-    <p>
-      如果忧郁是天赋<br>
-
-    </p>
+    <p>如果忧郁是天赋</p>
   </section>
 
   <!-- 联系方式 -->
@@ -211,9 +209,15 @@
 
   <!-- 添加音乐 -->
   <audio id="background-music" loop>
-    <source src="https://example.com/benxi-zenmeban.mp3" type="audio/mpeg">
+    <source src="https://example.com/bigbang-lies.mp3" type="audio/mpeg">
     您的浏览器不支持音频播放。
   </audio>
+
+  <!-- 音乐播放器 -->
+  <div class="music-player" onclick="toggleMusic()">
+    <i id="music-icon" class="fa fa-play"></i>
+    <span id="music-status">播放《Lies》</span>
+  </div>
 
   <!-- JavaScript控制音乐播放 -->
   <script>
@@ -225,7 +229,7 @@
     window.onload = () => {
       music.play();
       musicIcon.className = 'fa fa-pause';
-      musicStatus.textContent = '暂停《怎么办我想你》';
+      musicStatus.textContent = '暂停《Lies》';
     };
 
     // 切换播放/暂停
@@ -233,11 +237,11 @@
       if (music.paused) {
         music.play();
         musicIcon.className = 'fa fa-pause';
-        musicStatus.textContent = '暂停《怎么办我想你》';
+        musicStatus.textContent = '暂停《Lies》';
       } else {
         music.pause();
         musicIcon.className = 'fa fa-play';
-        musicStatus.textContent = '播放《怎么办我想你》';
+        musicStatus.textContent = '播放《Lies》';
       }
     }
   </script>
