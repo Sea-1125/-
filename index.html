@@ -1,84 +1,206 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人介绍</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #0072ff, #00c6ff);
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            padding: 20px;
-        }
-        .card img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 10px auto;
-            border: 3px solid #0072ff;
-        }
-        .card h1 {
-            font-size: 24px;
-            color: #0072ff;
-            margin: 10px 0;
-        }
-        .card p {
-            font-size: 16px;
-            color: #666;
-            margin: 10px 0 20px;
-        }
-        .info {
-            text-align: left;
-            padding: 0 10px;
-        }
-        .info ul {
-            list-style: none;
-            padding: 0;
-        }
-        .info li {
-            margin: 10px 0;
-            font-size: 16px;
-        }
-        .info a {
-            text-decoration: none;
-            color: #0072ff;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #aaa;
-        }i
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Website</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #101822;
+      color: #fff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 10%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease-in-out;
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    header nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #ddd;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #00bcd4;
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10%;
+      background: linear-gradient(to bottom, #1e1e2f, #1a233a);
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.imgur.com/3IvhwDC.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .hero .info {
+      max-width: 600px;
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    .hero h2 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      color: #bbb;
+    }
+
+    .hero button {
+      background: #00bcd4;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .hero button:hover {
+      background: #0288a5;
+      transform: scale(1.05);
+    }
+
+    .contacts {
+      padding: 100px 10%;
+      text-align: center;
+      background: #1a233a;
+    }
+
+    .contacts h3 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .contacts p {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #bbb;
+    }
+
+    .contacts a {
+      color: #00bcd4;
+      text-decoration: none;
+    }
+
+    footer {
+      background: #101822;
+      padding: 20px;
+      text-align: center;
+      color: #bbb;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="头像">
-        <h1>Hello,World</h1>
-        <p>@Adventure</p>
-        <div class="info">
-            <h2>联系我</h2>
-            <ul>
-                <li><strong>🐧：</strong>1423023756</li>
-                <li><strong>📮：</strong><a href="mailto:cxezysyf4843@gmail.com">cxezysyf4843@gmail.com</a></li>
-                <li><strong>Telegram：</strong><a href="https://t.me/liwuyyds" target="_blank">@liwuyyds</a></li>
-            </ul>
-        </div>
-        <footer>© 2024 我的个人网站 | 保留所有权利</footer>
+  <!-- Header -->
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="info">
+      <h2>Hi, I'm [Your Name]</h2>
+      <p>
+        Welcome to my personal website. I specialize in [Your Expertise] and have a passion for creating impactful and innovative solutions. Explore my journey and get to know me better.
+      </p>
+      <button>Discover More</button>
     </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contacts">
+    <h3>Contact Me</h3>
+    <p> QQ: 1423023756</p>
+    <p> Email: <a href="mailto:cxezysyf4843@gmail.com">cxezysyf4843@gmail.com</a></p>
+    <p> Telegram: <a href="https://t.me/liwuyyds">@liwuyyds</a></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 [Your Name]. All rights reserved.
+  </footer>
+
+  <script>
+    // Add scroll effect to header
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  </script>
 </body>
 </html>
