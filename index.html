@@ -21,6 +21,7 @@
       scroll-behavior: smooth;
     }
 
+    /* 顶部导航栏 */
     header {
       position: fixed;
       top: 0;
@@ -40,11 +41,35 @@
       text-decoration: none;
       color: #ddd;
       font-size: 16px;
+      position: relative;
+      overflow: hidden;
       transition: color 0.3s ease;
     }
 
     header nav a:hover {
       color: #00e5ff;
+    }
+
+    header nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 100%;
+      height: 2px;
+      background: #00e5ff;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    header nav a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.9);
     }
 
     .hero {
@@ -180,7 +205,7 @@
 </head>
 <body>
   <!-- 顶部导航栏 -->
-  <header>
+  <header id="main-header">
     <nav>
       <a href="#about">关于我</a>
       <a href="#contact">联系我</a>
@@ -209,14 +234,14 @@
 
   <!-- 添加音乐 -->
   <audio id="background-music" loop>
-    <source src="https://example.com/bigbang-lies.mp3" type="audio/mpeg">
+    <source src="https://www.bensound.com/bensound-music/bensound-cute.mp3" type="audio/mpeg">
     您的浏览器不支持音频播放。
   </audio>
 
   <!-- 音乐播放器 -->
   <div class="music-player" onclick="toggleMusic()">
     <i id="music-icon" class="fa fa-play"></i>
-    <span id="music-status">播放《Lies》</span>
+    <span id="music-status">播放背景音乐</span>
   </div>
 
   <!-- JavaScript控制音乐播放 -->
@@ -229,7 +254,7 @@
     window.onload = () => {
       music.play();
       musicIcon.className = 'fa fa-pause';
-      musicStatus.textContent = '暂停《Lies》';
+      musicStatus.textContent = '暂停背景音乐';
     };
 
     // 切换播放/暂停
@@ -237,11 +262,11 @@
       if (music.paused) {
         music.play();
         musicIcon.className = 'fa fa-pause';
-        musicStatus.textContent = '暂停《Lies》';
+        musicStatus.textContent = '暂停背景音乐';
       } else {
         music.pause();
         musicIcon.className = 'fa fa-play';
-        musicStatus.textContent = '播放《Lies》';
+        musicStatus.textContent = '播放背景音乐';
       }
     }
   </script>
