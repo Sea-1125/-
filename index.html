@@ -142,43 +142,6 @@
       color: #bbb;
     }
 
-    /* 音乐播放器 */
-    .music-player {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0, 188, 212, 0.1);
-      padding: 15px 20px;
-      border-radius: 30px;
-      box-shadow: 0px 4px 20px rgba(0, 188, 212, 0.5);
-      z-index: 1001;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .music-player:hover {
-      background: rgba(0, 188, 212, 0.2);
-    }
-
-    .music-player i {
-      font-size: 24px;
-      color: #00e5ff;
-      transition: transform 0.3s ease;
-    }
-
-    .music-player:hover i {
-      transform: scale(1.2);
-    }
-
-    .music-player span {
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
     /* 动画效果 */
     @keyframes fadeIn {
       0% {
@@ -232,46 +195,17 @@
     &copy; 2024 Adventure. All rights reserved.
   </footer>
 
-  <!-- 添加音乐 -->
-  <audio id="background-music" loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-cute.mp3" type="audio/mpeg">
-    您的浏览器不支持音频播放。
-  </audio>
-
-  <!-- 音乐播放器 -->
-  <div class="music-player" onclick="toggleMusic()">
-    <i id="music-icon" class="fa fa-play"></i>
-    <span id="music-status">播放背景音乐</span>
-  </div>
-
-  <!-- JavaScript控制音乐播放 -->
   <script>
-    const music = document.getElementById('background-music');
-    const musicIcon = document.getElementById('music-icon');
-    const musicStatus = document.getElementById('music-status');
+    // 导航栏滚动动态效果
+    const header = document.getElementById("main-header");
 
-    // 自动播放音乐
-    window.onload = () => {
-      music.play();
-      musicIcon.className = 'fa fa-pause';
-      musicStatus.textContent = '暂停背景音乐';
-    };
-
-    // 切换播放/暂停
-    function toggleMusic() {
-      if (music.paused) {
-        music.play();
-        musicIcon.className = 'fa fa-pause';
-        musicStatus.textContent = '暂停背景音乐';
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
       } else {
-        music.pause();
-        musicIcon.className = 'fa fa-play';
-        musicStatus.textContent = '播放背景音乐';
+        header.classList.remove("scrolled");
       }
-    }
+    });
   </script>
-
-  <!-- 添加FontAwesome图标库 -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
