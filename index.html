@@ -1,20 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>我的网站</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人介绍</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        header { background: #333; color: white; padding: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #0072ff, #00c6ff);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            padding: 20px;
+        }
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 10px auto;
+            border: 3px solid #0072ff;
+        }
+        .card h1 {
+            font-size: 24px;
+            color: #0072ff;
+            margin: 10px 0;
+        }
+        .card p {
+            font-size: 16px;
+            color: #666;
+            margin: 10px 0 20px;
+        }
+        .info {
+            text-align: left;
+            padding: 0 10px;
+        }
+        .info ul {
+            list-style: none;
+            padding: 0;
+        }
+        .info li {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .info a {
+            text-decoration: none;
+            color: #0072ff;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>欢迎来到我的网站</h1>
-    </header>
-    <section>
-        <p>🐧：1423023756</p>
-        <p>📮：cxezysyf4843@gmail.com</p>
-        <p>tg：liwuyyds</p>
-    </section>
+    <div class="card">
+        <img src="https://via.placeholder.com/100" alt="头像">
+        <h1>欢迎来到我的个人网站</h1>
+        <p>@Adventure</p>
+        <div class="info">
+            <h2>联系我</h2>
+            <ul>
+                <li><strong>企鹅：</strong>1423023756</li>
+                <li><strong>邮箱：</strong><a href="mailto:cxezysyf4843@gmail.com">cxezysyf4843@gmail.com</a></li>
+                <li><strong>Telegram：</strong><a href="https://t.me/liwuyyds" target="_blank">@liwuyyds</a></li>
+            </ul>
+        </div>
+        <footer>© 2024 我的个人网站 | 保留所有权利</footer>
+    </div>
 </body>
 </html>
