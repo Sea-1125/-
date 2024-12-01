@@ -18,144 +18,158 @@
             align-items: center;
             flex-direction: column;
             height: 100vh;
-            background-color: #121212;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
             overflow: hidden;
             color: #fff;
             transition: background 1s ease;
         }
 
         .weather-container {
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            padding: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 40px;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .weather-container:hover {
+            transform: translateY(-10px);
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: bold;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .search-bar {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
         }
 
         #city {
-            padding: 12px 20px;
-            width: 80%;
+            padding: 15px 25px;
+            width: 85%;
             border: none;
             border-radius: 25px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             text-transform: capitalize;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         #city:focus {
             outline: none;
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
         }
 
         button {
-            padding: 12px 20px;
+            padding: 15px 30px;
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 30px;
-            font-size: 1.2rem;
+            border-radius: 35px;
+            font-size: 1.3rem;
             transition: all 0.3s ease;
             text-transform: uppercase;
             font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
             background-color: #45a049;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         .weather-info {
             display: none;
             margin-top: 20px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            transition: opacity 0.5s ease;
         }
 
         .weather-info h2 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .weather-info p {
-            font-size: 1.2rem;
-            margin: 5px 0;
+            margin: 8px 0;
+            font-size: 1.3rem;
         }
 
         .developer-info {
-            margin-top: 30px;
+            margin-top: 40px;
             text-align: center;
             font-size: 1rem;
+            color: #aaa;
         }
 
         .developer-info img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             margin-bottom: 10px;
+            transition: transform 0.3s ease;
         }
 
-        .developer-info p {
-            color: #999;
+        .developer-info img:hover {
+            transform: scale(1.1);
         }
 
         .input-hint {
-            font-size: 0.9rem;
-            color: #f1f1f1;
-            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #ddd;
+            margin-bottom: 15px;
         }
 
         /* 动态天气背景 */
         .clear {
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            background: url('https://source.unsplash.com/1600x900/?clear-sky') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .cloudy {
-            background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
+            background: url('https://source.unsplash.com/1600x900/?cloudy') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .rainy {
-            background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
+            background: url('https://source.unsplash.com/1600x900/?rainy') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .stormy {
-            background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
+            background: url('https://source.unsplash.com/1600x900/?storm') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .snowy {
-            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            background: url('https://source.unsplash.com/1600x900/?snow') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .foggy {
-            background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
+            background: url('https://source.unsplash.com/1600x900/?fog') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
         .thunderstorm {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+            background: url('https://source.unsplash.com/1600x900/?thunderstorm') no-repeat center center/cover;
             animation: gradient-bg 12s ease infinite;
         }
 
@@ -184,7 +198,7 @@
     </div>
 
     <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@Sea" />
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
         <p>Sea</p>
         <p>Email: cxezysyf4843@gmail.com</p>
         <p>© 2024 Sea Studio</p>
@@ -216,35 +230,31 @@
                 document.getElementById("description").textContent = data.weather[0].description;
                 document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
-                document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
+                document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed} m/s`;
 
-                // 根据天气类型更改背景
-                const weatherCondition = data.weather[0].main.toLowerCase();
-                changeBackground(weatherCondition);
+                // 动态背景切换
+                const condition = data.weather[0].main.toLowerCase();
+                const weatherInfo = document.getElementById("weather-info");
+                weatherInfo.style.display = "block";
+                document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
 
-                document.getElementById("weather-info").style.display = "block"; // 显示天气信息
+                if (condition.includes("clear")) {
+                    document.body.classList.add("clear");
+                } else if (condition.includes("cloud")) {
+                    document.body.classList.add("cloudy");
+                } else if (condition.includes("rain")) {
+                    document.body.classList.add("rainy");
+                } else if (condition.includes("storm")) {
+                    document.body.classList.add("stormy");
+                } else if (condition.includes("snow")) {
+                    document.body.classList.add("snowy");
+                } else if (condition.includes("fog")) {
+                    document.body.classList.add("foggy");
+                } else {
+                    document.body.classList.add("thunderstorm");
+                }
             } catch (error) {
-                alert("获取天气信息失败，请稍后再试！");
-            }
-        }
-
-        function changeBackground(condition) {
-            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
-
-            if (condition.includes("clear")) {
-                document.body.classList.add("clear");
-            } else if (condition.includes("cloudy")) {
-                document.body.classList.add("cloudy");
-            } else if (condition.includes("rain")) {
-                document.body.classList.add("rainy");
-            } else if (condition.includes("storm")) {
-                document.body.classList.add("stormy");
-            } else if (condition.includes("snow")) {
-                document.body.classList.add("snowy");
-            } else if (condition.includes("fog")) {
-                document.body.classList.add("foggy");
-            } else {
-                document.body.classList.add("thunderstorm");
+                alert("获取天气信息失败！");
             }
         }
     </script>
