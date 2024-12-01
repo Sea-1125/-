@@ -15,7 +15,9 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #121212;
+      background: linear-gradient(45deg, #1c1c1c, #141414, #2e2e2e);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
       color: #ffffff;
       overflow-x: hidden;
       scroll-behavior: smooth;
@@ -72,6 +74,7 @@
       background: rgba(0, 0, 0, 0.9);
     }
 
+    /* 英雄区 */
     .hero {
       height: 100vh;
       display: flex;
@@ -106,6 +109,7 @@
       max-width: 600px;
     }
 
+    /* 联系方式 */
     .contact {
       padding: 100px 10%;
       background: #1e1e1e;
@@ -135,11 +139,64 @@
       color: #00bcd4;
     }
 
-    footer {
-      background: #101010;
-      padding: 20px;
-      text-align: center;
-      color: #bbb;
+    /* 技能展示栏 */
+    .skills {
+      padding: 50px 10%;
+      background: #141414;
+    }
+
+    .skills h3 {
+      font-size: 32px;
+      color: #00bcd4;
+      margin-bottom: 20px;
+    }
+
+    .skill {
+      margin-bottom: 20px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: #333;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 10px;
+      background: #00bcd4;
+      transition: width 0.6s ease;
+    }
+
+    /* 时间轴 */
+    .timeline {
+      padding: 50px 10%;
+      background: #1e1e1e;
+      color: #ddd;
+    }
+
+    .timeline h3 {
+      font-size: 32px;
+      color: #00bcd4;
+      margin-bottom: 20px;
+    }
+
+    .timeline-item {
+      margin-bottom: 20px;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 10px;
+      height: 10px;
+      background: #00bcd4;
+      border-radius: 50%;
     }
 
     /* 动画效果 */
@@ -164,6 +221,12 @@
         opacity: 1;
       }
     }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
@@ -171,6 +234,7 @@
   <header id="main-header">
     <nav>
       <a href="#about">关于我</a>
+      <a href="#skills">技能</a>
       <a href="#contact">联系我</a>
     </nav>
   </header>
@@ -180,6 +244,34 @@
     <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="头像">
     <h2>@Adventure</h2>
     <p>你那熟练的交际手法 总让我以为是爱情</p>
+  </section>
+
+  <!-- 技能展示 -->
+  <section class="skills" id="skills">
+    <h3>我的技能</h3>
+    <div class="skill">
+      <p>JavaScript</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: 90%;"></div>
+      </div>
+    </div>
+    <div class="skill">
+      <p>Python</p>
+      <div class="progress-bar">
+        <div class="progress" style="width: 80%;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 时间轴 -->
+  <section class="timeline">
+    <h3>我的经历</h3>
+    <div class="timeline-item">
+      <p>2023 - 创办个人项目</p>
+    </div>
+    <div class="timeline-item">
+      <p>2024 - 发布第一款产品</p>
+    </div>
   </section>
 
   <!-- 联系方式 -->
