@@ -148,11 +148,6 @@
             animation: gradient-bg 10s ease infinite;
         }
 
-        .thunderstorm {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
-            animation: gradient-bg 10s ease infinite;
-        }
-
         @keyframes gradient-bg {
             0% { background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6)); }
             50% { background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7)); }
@@ -184,7 +179,7 @@
     </div>
 
     <script>
-        const apiKey = '383a13d285204172eaa9b867cc08225c';
+        const apiKey = 'cd67ae9c28094176b5c26f3436d0e14f';
 
         async function getWeather() {
             const city = document.getElementById("city").value;
@@ -193,26 +188,26 @@
                 return;
             }
 
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=zh_cn&units=metric`;
+            const url = `https://devapi.qweather.com/v7/weather/now?location=${city}&key=${apiKey}`;
 
             try {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                if (data.cod === "404") {
+                if (data.code !== "200") {
                     alert("城市未找到！");
                     return;
                 }
 
                 // 更新界面上的天气信息
-                document.getElementById("city-name").textContent = data.name + " " + data.sys.country;
-                document.getElementById("description").textContent = data.weather[0].description;
-                document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
-                document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
-                document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
+                document.getElementById("city-name").textContent = city;
+                document.getElementById("description").textContent = data.now.text;
+                document.getElementById("temperature").textContent = `温度: ${data.now.temp}°C`;
+                document.getElementById("humidity").textContent = `湿度: ${data.now.humidity}%`;
+                document.getElementById("wind-speed").textContent = `风速: ${data.now.windSpeed}公里/小时`;
 
                 // 根据天气类型更改背景
-                const weatherCondition = data.weather[0].main.toLowerCase();
+                const weatherCondition = data.now.text.toLowerCase();
                 changeBackground(weatherCondition);
 
                 document.getElementById("weather-info").style.display = "block"; // 显示天气信息
@@ -222,22 +217,18 @@
         }
 
         function changeBackground(condition) {
-            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
+            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy");
 
-            if (condition.includes("clear")) {
+            if (condition.includes("晴")) {
                 document.body.classList.add("clear");
-            } else if (condition.includes("cloudy")) {
+            } else if (condition.includes("多云") || condition.includes("阴")) {
                 document.body.classList.add("cloudy");
-            } else if (condition.includes("rain")) {
+            } else if (condition.includes("雨")) {
                 document.body.classList.add("rainy");
-            } else if (condition.includes("storm")) {
-                document.body.classList.add("stormy");
-            } else if (condition.includes("snow")) {
+            } else if (condition.includes("雪")) {
                 document.body.classList.add("snowy");
-            } else if (condition.includes("fog")) {
+            } else if (condition.includes("雾")) {
                 document.body.classList.add("foggy");
-            } else if (condition.includes("thunder")) {
-                document.body.classList.add("thunderstorm");
             } else {
                 document.body.classList.add("clear");
             }
