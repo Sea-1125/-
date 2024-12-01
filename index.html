@@ -19,10 +19,11 @@
             align-items: center;
             flex-direction: column;
             height: 100vh;
+            transition: background 2s, color 1s;
         }
 
         .weather-container {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -34,6 +35,7 @@
         h1 {
             font-size: 2rem;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
         .search-bar {
@@ -44,6 +46,7 @@
             padding: 10px;
             width: 80%;
             margin-right: 10px;
+            text-transform: capitalize;
         }
 
         button {
@@ -84,13 +87,34 @@
             border-radius: 50%;
             margin-bottom: 10px;
         }
+
+        /* 动态天气背景 */
+        .clear {
+            background: linear-gradient(135deg, #87CEEB, #1E90FF);
+        }
+
+        .cloudy {
+            background: linear-gradient(135deg, #B0C4DE, #D3D3D3);
+        }
+
+        .rainy {
+            background: linear-gradient(135deg, #708090, #2F4F4F);
+        }
+
+        .stormy {
+            background: linear-gradient(135deg, #696969, #333333);
+        }
+
+        .snowy {
+            background: linear-gradient(135deg, #F0F8FF, #B0E0E6);
+        }
     </style>
 </head>
 <body>
     <div class="weather-container">
         <h1>实时天气应用</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="请输入城市名称" />
+            <input type="text" id="city" placeholder="Enter City Name" />
             <button onclick="getWeather()">查询</button>
         </div>
         <div id="weather-info" class="weather-info">
@@ -103,8 +127,8 @@
     </div>
 
     <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
-        <p>开发者: Sea</p>
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
+        <p>开发者: @</p>
     </div>
 
     <script>
@@ -137,9 +161,32 @@
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
+                // 根据天气类型更改背景
+                const weatherCondition = data.weather[0].main.toLowerCase();
+                changeBackground(weatherCondition);
+
                 document.getElementById("weather-info").style.display = "block"; // 显示天气信息
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
+            }
+        }
+
+        // 根据天气类型更改背景色
+        function changeBackground(condition) {
+            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy");
+
+            if (condition.includes("clear")) {
+                document.body.classList.add("clear");
+            } else if (condition.includes("cloudy")) {
+                document.body.classList.add("cloudy");
+            } else if (condition.includes("rain")) {
+                document.body.classList.add("rainy");
+            } else if (condition.includes("storm")) {
+                document.body.classList.add("stormy");
+            } else if (condition.includes("snow")) {
+                document.body.classList.add("snowy");
+            } else {
+                document.body.classList.add("clear");
             }
         }
     </script>
