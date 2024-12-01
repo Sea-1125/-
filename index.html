@@ -1,31 +1,217 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea 聊天室</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sea - 聊天室</title>
+    <!-- 引入 Firebase 和其他需要的库 -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* 基本样式 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 90vh;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+        
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .chat-box::-webkit-scrollbar-thumb {
+            background-color: #ddd;
+            border-radius: 4px;
+        }
+        
+        .message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .message .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff;
+        }
+        
+        .message .text {
+            background-color: #f1f1f1;
+            border-radius: 15px;
+            padding: 10px 15px;
+            max-width: 80%;
+            font-size: 14px;
+        }
+        
+        .message.user .text {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+        
+        .message.sea .text {
+            background-color: #f1f1f1;
+            color: black;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .input-container textarea {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            resize: none;
+            height: 40px;
+        }
+        
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <div class="chat-app">
-    <header class="chat-header">
-      <div class="chat-title">Sea 聊天室</div>
-      <div class="online-users" id="online-users">在线用户: 0</div>
-    </header>
-    <main class="chat-main">
-      <div class="messages" id="messages"></div>
-    </main>
-    <footer class="chat-footer">
-      <div class="input-container">
-        <input type="text" id="username" placeholder="请输入用户名" />
-        <input type="text" id="message" placeholder="输入消息..." />
-        <button id="send-btn" onclick="sendMessage()">发送</button>
-      </div>
-    </footer>
-  </div>
+    <div class="chat-container">
+        <div class="header">Sea - AI 聊天室</div>
+        <div class="chat-box" id="chat-box">
+            <div class="message sea">
+                <div class="avatar"></div>
+                <div class="text">你好！我是 Sea，有什么可以帮忙的吗？</div>
+            </div>
+        </div>
+        <div class="input-container">
+            <textarea id="user-input" placeholder="输入消息..."></textarea>
+            <button onclick="sendMessage()">发送</button>
+        </div>
+    </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
-  <script src="chat.js"></script>
+    <!-- Firebase 初始化与代码 -->
+    <script>
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsRp1d0zykG7rtsuK3I0Bnom66uwoXXIM",
+            authDomain: "sea1-e6f31.firebaseapp.com",
+            databaseURL: "https://sea1-e6f31-default-rtdb.firebaseio.com",
+            projectId: "sea1-e6f31",
+            storageBucket: "sea1-e6f31.firebasestorage.app",
+            messagingSenderId: "358374955236",
+            appId: "1:358374955236:web:1d53fd3e8169e1a67bf4f1",
+            measurementId: "G-MBF3HJMY39"
+        };
+        
+        // 初始化 Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        // 获取聊天框元素
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+
+        // 发送消息
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            addMessage(message, "user");
+            userInput.value = "";
+
+            // 保存到 Firebase 实时数据库
+            firebase.database().ref('messages').push({
+                user: "user",
+                message: message
+            });
+
+            // 获取 AI 回复
+            getSeaResponse(message);
+        }
+
+        // 添加消息到聊天框
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", sender);
+            const textDiv = document.createElement("div");
+            textDiv.classList.add("text");
+            textDiv.textContent = content;
+            messageDiv.appendChild(textDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // 获取 Sea 的回复
+        async function getSeaResponse(message) {
+            addMessage("正在思考...", "sea");
+
+            // 从 Firebase 获取聊天记录
+            const messagesRef = database.ref('messages');
+            const snapshot = await messagesRef.once('value');
+            const messages = snapshot.val();
+
+            // 在这里处理您从 Firebase 获取到的消息
+            // 如果需要，可以发送 API 请求给外部服务器以获取 AI 回复
+            const reply = "抱歉，我无法理解您的问题。";  // 这里的回复可以由 API 来生成
+
+            // 更新聊天框
+            const thinkingMessage = document.querySelector('.message.sea:last-child');
+            thinkingMessage.remove();
+            addMessage(reply, "sea");
+        }
+
+        // 启动时加载已有的聊天记录
+        firebase.database().ref('messages').on('child_added', (snapshot) => {
+            const data = snapshot.val();
+            const sender = data.user;
+            const message = data.message;
+            addMessage(message, sender);
+        });
+    </script>
 </body>
 </html>
