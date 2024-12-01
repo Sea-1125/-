@@ -5,40 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>实时天气</title>
     <style>
-        /* 样式和原代码类似，添加图标展示、未来天气布局 */
-        /* 省略基础样式部分，见后文 */
+        /* 通用样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: #fff;
+            overflow: hidden;
+            transition: background 1s ease;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        /* 天气容器 */
+        .weather-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-bar {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #city {
+            padding: 12px 20px;
+            width: 70%;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 10px;
+            text-transform: capitalize;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #city:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+
+        .weather-info {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .weather-info h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .weather-info p {
+            font-size: 1.2rem;
+            margin: 5px 0;
+        }
+
+        .developer-info {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .developer-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .developer-info p {
+            color: #999;
+        }
+
+        .input-tip {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #ddd;
+        }
     </style>
 </head>
 <body>
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="请输入城市名" />
+            <input type="text" id="city" placeholder="请输入城市 (首字母大写英文)" />
             <button onclick="getWeather()">查询</button>
         </div>
-
-        <!-- 当前天气信息 -->
+        <div class="input-tip">请输入纯英文，且首字母大写的城市名称</div>
         <div id="weather-info" class="weather-info">
-            <img id="weather-icon" src="" alt="Weather Icon" style="width: 100px; height: 100px;" />
             <h2 id="city-name"></h2>
             <p id="description"></p>
             <p id="temperature"></p>
             <p id="humidity"></p>
             <p id="wind-speed"></p>
-            <p id="local-time"></p>
-            <p id="sunrise-sunset"></p>
-        </div>
-
-        <!-- 未来天气预报 -->
-        <div id="forecast-container" style="display: none; margin-top: 20px;">
-            <h3>未来三天天气</h3>
-            <div id="forecast"></div>
         </div>
     </div>
 
     <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
-        <p>Sea</p>
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
+        <p>@Sea</p>
         <p>Email: cxezysyf4843@gmail.com</p>
         <p>© 2024 Sea Studio</p>
     </div>
@@ -46,10 +157,17 @@
     <script>
         const apiKey = '383a13d285204172eaa9b867cc08225c';
 
+        function validateInput(city) {
+            const regex = /^[A-Z][a-z]*$/; // 纯英文，首字母大写
+            return regex.test(city);
+        }
+
         async function getWeather() {
-            const city = document.getElementById("city").value;
-            if (!city) {
-                alert("请输入城市名称");
+            const cityInput = document.getElementById("city");
+            const city = cityInput.value.trim();
+
+            if (!validateInput(city)) {
+                alert("请输入纯英文城市名称，且首字母需大写！");
                 return;
             }
 
@@ -64,65 +182,17 @@
                     return;
                 }
 
-                // 更新天气信息
-                const weatherIcon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-                document.getElementById("weather-icon").src = weatherIcon;
-
-                document.getElementById("city-name").textContent = `${data.name} ${data.sys.country}`;
-                document.getElementById("description").textContent = data.weather[0].description;
+                // 更新界面上的天气信息
+                document.getElementById("city-name").textContent = `${data.name} (${data.sys.country})`;
+                document.getElementById("description").textContent = `天气: ${data.weather[0].description}`;
                 document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
-                // 本地时间
-                const localTime = new Date((data.dt + data.timezone) * 1000);
-                document.getElementById("local-time").textContent = `本地时间: ${localTime.toLocaleTimeString()}`;
-
-                // 日出和日落时间
-                const sunrise = new Date((data.sys.sunrise + data.timezone) * 1000);
-                const sunset = new Date((data.sys.sunset + data.timezone) * 1000);
-                document.getElementById("sunrise-sunset").textContent = `日出: ${sunrise.toLocaleTimeString()} | 日落: ${sunset.toLocaleTimeString()}`;
-
-                // 根据天气条件设置背景
-                changeBackground(data.weather[0].main.toLowerCase());
-
                 document.getElementById("weather-info").style.display = "block";
-
-                // 获取未来天气
-                getForecast(city);
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
             }
-        }
-
-        async function getForecast(city) {
-            const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&lang=zh_cn&units=metric`;
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                const forecast = data.list.slice(0, 24).map((entry) => {
-                    const date = new Date(entry.dt * 1000);
-                    return `
-                        <div>
-                            <p>${date.toLocaleString("zh-CN", { hour: "2-digit", minute: "2-digit" })}</p>
-                            <p>温度: ${entry.main.temp}°C</p>
-                            <img src="https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png" style="width: 50px; height: 50px;" />
-                            <p>${entry.weather[0].description}</p>
-                        </div>
-                    `;
-                }).join("");
-
-                document.getElementById("forecast").innerHTML = forecast;
-                document.getElementById("forecast-container").style.display = "block";
-            } catch (error) {
-                alert("获取未来天气失败，请稍后再试！");
-            }
-        }
-
-        function changeBackground(condition) {
-            // 修改背景样式（同前代码）
         }
     </script>
 </body>
