@@ -134,7 +134,7 @@
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="请输入城市 (首字母大写英文)" />
+            <input type="text" id="city" placeholder="请输入城市 (首字母大写英文)" oninput="capitalizeFirstLetter()" />
             <button onclick="getWeather()">查询</button>
         </div>
         <div class="input-tip">请输入纯英文，且首字母大写的城市名称</div>
@@ -157,6 +157,17 @@
     <script>
         const apiKey = '383a13d285204172eaa9b867cc08225c';
 
+        // 自动将首字母大写
+        function capitalizeFirstLetter() {
+            const inputField = document.getElementById("city");
+            let cityName = inputField.value.trim();
+            if (cityName.length > 0) {
+                cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
+                inputField.value = cityName;
+            }
+        }
+
+        // 输入验证：纯英文，首字母大写
         function validateInput(city) {
             const regex = /^[A-Z][a-z]*$/; // 纯英文，首字母大写
             return regex.test(city);
@@ -166,6 +177,7 @@
             const cityInput = document.getElementById("city");
             const city = cityInput.value.trim();
 
+            // 检查输入是否符合要求
             if (!validateInput(city)) {
                 alert("请输入纯英文城市名称，且首字母需大写！");
                 return;
@@ -177,6 +189,7 @@
                 const response = await fetch(url);
                 const data = await response.json();
 
+                // 处理城市未找到的情况
                 if (data.cod === "404") {
                     alert("城市未找到！");
                     return;
@@ -189,6 +202,7 @@
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
+                // 显示天气信息
                 document.getElementById("weather-info").style.display = "block";
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
