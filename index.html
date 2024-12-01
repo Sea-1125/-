@@ -226,6 +226,7 @@
 
             // 强制转换为英文并让首字母大写
             value = value.replace(/[^A-Za-z]/g, ""); // 移除非字母字符
+
             if (value.length > 0) {
                 input.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
             }
@@ -235,17 +236,17 @@
         function changeBackground(condition) {
             document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
 
-            if (condition === "Clear") {
+            if (condition === "clear") {
                 document.body.classList.add("clear");
-            } else if (condition === "Clouds") {
+            } else if (condition === "clouds") {
                 document.body.classList.add("cloudy");
-            } else if (condition === "Rain") {
+            } else if (condition === "rain") {
                 document.body.classList.add("rainy");
-            } else if (condition === "Storm") {
+            } else if (condition === "storm") {
                 document.body.classList.add("stormy");
-            } else if (condition === "Snow") {
+            } else if (condition === "snow") {
                 document.body.classList.add("snowy");
-            } else if (condition === "Fog") {
+            } else if (condition === "fog") {
                 document.body.classList.add("foggy");
             } else {
                 document.body.classList.add("cloudy");
