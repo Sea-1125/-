@@ -164,6 +164,7 @@
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
+            <div style="color: #ffffff; margin-bottom: 10px; font-size: 1.1rem;">请输入城市名（全英文）</div>
             <input type="text" id="city" placeholder="请输入城市名（全英文）" oninput="capitalizeCity()" autocomplete="off" />
             <button onclick="getWeather()">查询</button>
         </div>
@@ -227,15 +228,17 @@
             const input = document.getElementById("city");
             let value = input.value;
 
-            // 让首字母大写，后面的字母小写
+            // 强制转换为英文并让首字母大写
+            value = value.replace(/[^A-Za-z]/g, ""); // 移除非字母字符
             if (value.length > 0) {
                 input.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
             }
         }
 
-        // 根据天气情况切换背景
+        // 根据天气条件改变背景
         function changeBackground(condition) {
             document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
+
             if (condition === "Clear") {
                 document.body.classList.add("clear");
             } else if (condition === "Clouds") {
