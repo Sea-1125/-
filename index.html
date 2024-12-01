@@ -22,8 +22,7 @@
             color: white;
             overflow: hidden;
             transition: background 1s ease;
-            opacity: 0;
-            animation: fadeIn 1.5s ease-in forwards;
+            animation: fadeIn 1.5s ease-out;
         }
 
         @keyframes fadeIn {
@@ -58,7 +57,33 @@
             margin-bottom: 30px;
             font-weight: 700;
             text-transform: uppercase;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #ff9a9e);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite, glow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
+            }
         }
 
         .search-bar {
@@ -126,38 +151,6 @@
             margin: 8px 0;
             font-size: 1.3rem;
         }
-
-        .developer-info {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 1rem;
-            color: #bbb;
-        }
-
-        .developer-info img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .developer-info p {
-            font-size: 1rem;
-            margin-top: 10px;
-        }
-
-        .developer-info a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-
-        .developer-info a:hover {
-            color: #4CAF50;
-        }
-
     </style>
 </head>
 <body>
@@ -175,14 +168,6 @@
             <p id="humidity"></p>
             <p id="wind-speed"></p>
         </div>
-    </div>
-
-    <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
-        <p>Sea</p>
-        <p>Email:cxezysyf4843@gmail.com</p>
-        <p>Telegram:liwuyyds</p>
-        <p>© 2024 Sea Studio</p>
     </div>
 
     <script>
@@ -213,27 +198,6 @@
                 document.getElementById("humidity").textContent = "湿度：" + data.main.humidity + "%";
                 document.getElementById("wind-speed").textContent = "风速：" + data.wind.speed + "m/s";
                 document.getElementById("weather-info").style.display = "block";
-
-                // 根据天气更换背景
-                const weatherCondition = data.weather[0].main.toLowerCase();
-                const body = document.body;
-                body.className = ""; // 重置class
-
-                if (weatherCondition.includes("clear")) {
-                    body.classList.add("clear");
-                } else if (weatherCondition.includes("cloud")) {
-                    body.classList.add("cloudy");
-                } else if (weatherCondition.includes("rain")) {
-                    body.classList.add("rainy");
-                } else if (weatherCondition.includes("storm")) {
-                    body.classList.add("stormy");
-                } else if (weatherCondition.includes("snow")) {
-                    body.classList.add("snowy");
-                } else if (weatherCondition.includes("fog")) {
-                    body.classList.add("foggy");
-                } else if (weatherCondition.includes("thunderstorm")) {
-                    body.classList.add("thunderstorm");
-                }
             } catch (error) {
                 alert("无法获取天气信息，请稍后重试！");
                 console.error(error);
