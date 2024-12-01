@@ -145,7 +145,7 @@
     <div class="weather-container">
         <h1>实时天气查询</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="请输入城市名（全英文）" oninput="capitalizeCity()" autocomplete="off" />
+            <input type="text" id="city" placeholder="请输入城市名" autocomplete="off" />
             <button onclick="getWeather()">查询</button>
         </div>
         <div id="weather-info" class="weather-info">
@@ -171,7 +171,7 @@
         async function getWeather() {
             const city = document.getElementById("city").value;
             if (!city) {
-                alert("请输入城市名称（全英文）");
+                alert("请输入城市名称");
                 return;
             }
 
@@ -196,17 +196,6 @@
                 document.getElementById("weather-info").style.display = "block"; // 显示天气信息
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
-            }
-        }
-
-        // 更新输入框首字母大写
-        function capitalizeCity() {
-            const input = document.getElementById("city");
-            let value = input.value;
-
-            // 首字母大写，其余字母小写
-            if (value.length > 0) {
-                input.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
             }
         }
     </script>
