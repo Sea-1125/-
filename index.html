@@ -4,147 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sea 聊天室</title>
-  <style>
-    body {
-      font-family: "微软雅黑", Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f2f2;
-    }
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      max-width: 600px;
-      margin: 0 auto;
-      height: 100vh;
-      background: #ffffff;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .chat-header {
-      background: #4CAF50;
-      color: #fff;
-      padding: 15px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .chat-messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      background: #f9f9f9;
-    }
-    .chat-message {
-      margin: 10px 0;
-      padding: 10px;
-      background: #4CAF50;
-      color: #fff;
-      border-radius: 10px;
-      max-width: 70%;
-    }
-    .chat-message.user {
-      background: #007BFF;
-      align-self: flex-end;
-    }
-    .chat-footer {
-      display: flex;
-      padding: 10px;
-      background: #ffffff;
-      border-top: 1px solid #e0e0e0;
-    }
-    .chat-footer input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 5px;
-      margin-right: 10px;
-    }
-    .chat-footer button {
-      padding: 10px 20px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .chat-footer button:hover {
-      background: #45a049;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">Sea 聊天室</div>
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-footer">
-      <input type="text" id="message-input" placeholder="请输入消息..." />
-      <button onclick="sendMessage()">发送</button>
-    </div>
+  <div class="chat-app">
+    <header class="chat-header">
+      <div class="chat-title">Sea 聊天室</div>
+      <div class="online-users" id="online-users">在线用户: 0</div>
+    </header>
+    <main class="chat-main">
+      <div class="messages" id="messages"></div>
+    </main>
+    <footer class="chat-footer">
+      <div class="input-container">
+        <input type="text" id="username" placeholder="请输入用户名" />
+        <input type="text" id="message" placeholder="输入消息..." />
+        <button id="send-btn" onclick="sendMessage()">发送</button>
+      </div>
+    </footer>
   </div>
 
-  <!-- Firebase 引入 -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
-
-  <script>
-    // Firebase 配置
-    const firebaseConfig = {
-      apiKey: "AIzaSyCfmqZKkrNbYqOusvZTG-aKSj3fDQvFOmA",
-      authDomain: "seazz-b08af.firebaseapp.com",
-      databaseURL: "https://seazz-b08af-default-rtdb.firebaseio.com",
-      projectId: "seazz-b08af",
-      storageBucket: "seazz-b08af.firebasestorage.app",
-      messagingSenderId: "99112612394",
-      appId: "1:99112612394:web:d32611d8b93c529d26c953",
-      measurementId: "G-1MKRC8M26W"
-    };
-
-    // 初始化 Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // 获取用户名
-    let username = prompt("请输入您的用户名：");
-
-    // 监听聊天消息
-    const chatMessages = document.getElementById("chat-messages");
-    const messagesRef = db.ref("messages");
-
-    messagesRef.on("child_added", (snapshot) => {
-      const data = snapshot.val();
-      displayMessage(data.message, data.sender, data.timestamp);
-    });
-
-    // 显示消息
-    function displayMessage(message, sender, timestamp) {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("chat-message");
-      if (sender === username) {
-        messageDiv.classList.add("user");
-      }
-      messageDiv.innerHTML = `<strong>${sender}</strong>: ${message} <br> <small>${new Date(timestamp).toLocaleString()}</small>`;
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    // 发送消息
-    function sendMessage() {
-      const messageInput = document.getElementById("message-input");
-      const message = messageInput.value.trim();
-      if (message === "") return;
-
-      const timestamp = Date.now();
-
-      // 保存到 Firebase
-      messagesRef.push({
-        message: message,
-        sender: username,
-        timestamp: timestamp
-      });
-
-      // 清空输入框
-      messageInput.value = "";
-    }
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
+  <script src="chat.js"></script>
 </body>
 </html>
