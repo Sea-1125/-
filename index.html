@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时天气</title>
+    <title>实时天气查询</title>
     <style>
         * {
             margin: 0;
@@ -19,26 +19,26 @@
             flex-direction: column;
             height: 100vh;
             transition: background 1s ease;
-            overflow: hidden;
             color: #fff;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
         }
 
         .weather-container {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             border-radius: 15px;
             padding: 30px;
             width: 90%;
             max-width: 500px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            font-weight: bold;
-            color: #ffffff;
+            color: white;
         }
 
         .search-bar {
@@ -46,19 +46,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         #city {
             padding: 12px 20px;
-            width: 70%;
+            width: 80%;
             border: none;
             border-radius: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 1.2rem;
-            margin-right: 10px;
+            margin-bottom: 10px;
             text-transform: capitalize;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
         }
 
@@ -78,6 +79,7 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
         button:hover {
@@ -117,54 +119,48 @@
             color: #999;
         }
 
-        /* 动态天气背景 */
+        .input-hint {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* 动态背景变化 */
         .clear {
             background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
-            animation: gradient-bg 10s ease infinite;
         }
 
         .cloudy {
-            background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
-            animation: gradient-bg 10s ease infinite;
+            background: linear-gradient(135deg, rgba(176, 224, 230, 0.6), rgba(211, 211, 211, 0.6));
         }
 
         .rainy {
             background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
-            animation: gradient-bg 10s ease infinite;
         }
 
         .stormy {
             background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
-            animation: gradient-bg 10s ease infinite;
         }
 
         .snowy {
             background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
-            animation: gradient-bg 10s ease infinite;
         }
 
         .foggy {
             background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
-            animation: gradient-bg 10s ease infinite;
         }
 
         .thunderstorm {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
-            animation: gradient-bg 10s ease infinite;
         }
 
-        @keyframes gradient-bg {
-            0% { background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6)); }
-            50% { background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7)); }
-            100% { background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8)); }
-        }
     </style>
 </head>
 <body>
     <div class="weather-container">
-        <h1>实时天气</h1>
+        <h1>实时天气查询</h1>
         <div class="search-bar">
-            <div style="color: #ffffff; margin-bottom: 10px; font-size: 1.1rem;">请输入城市名（全英文）</div>
+            <div class="input-hint">请输入城市名（全英文）</div>
             <input type="text" id="city" placeholder="请输入城市名（全英文）" oninput="capitalizeCity()" autocomplete="off" />
             <button onclick="getWeather()">查询</button>
         </div>
@@ -178,7 +174,7 @@
     </div>
 
     <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
         <p>Sea</p>
         <p>Email: cxezysyf4843@gmail.com</p>
         <p>© 2024 Sea Studio</p>
@@ -206,14 +202,14 @@
                     return;
                 }
 
-                // 更新界面上的天气信息
+                // 更新天气信息
                 document.getElementById("city-name").textContent = data.name + " " + data.sys.country;
                 document.getElementById("description").textContent = data.weather[0].description;
                 document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
-                // 根据天气类型更改背景
+                // 根据天气条件更新背景
                 const weatherCondition = data.weather[0].main.toLowerCase();
                 changeBackground(weatherCondition);
 
@@ -235,7 +231,7 @@
             }
         }
 
-        // 根据天气条件改变背景
+        // 根据天气条件更新背景
         function changeBackground(condition) {
             document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
 
