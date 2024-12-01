@@ -76,6 +76,8 @@
             border-radius: 30px;
             font-size: 1.2rem;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
         button:hover {
@@ -141,6 +143,16 @@
             animation: gradient-bg 10s ease infinite;
         }
 
+        .foggy {
+            background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .thunderstorm {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
         @keyframes gradient-bg {
             0% { background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6)); }
             50% { background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7)); }
@@ -152,7 +164,7 @@
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="Enter City Name" />
+            <input type="text" id="city" placeholder="请输入城市名" />
             <button onclick="getWeather()">查询</button>
         </div>
         <div id="weather-info" class="weather-info">
@@ -166,8 +178,8 @@
 
     <div class="developer-info">
         <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
-        <p>@Sea</p>
-        <p>Email：cxezysyf4843@gmail.com</p>
+        <p>开发者: @Sea</p>
+        <p>Email: cxezysyf4843@gmail.com</p>
         <p>© 2024 Sea Studio</p>
     </div>
 
@@ -210,7 +222,7 @@
         }
 
         function changeBackground(condition) {
-            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy");
+            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
 
             if (condition.includes("clear")) {
                 document.body.classList.add("clear");
@@ -222,6 +234,10 @@
                 document.body.classList.add("stormy");
             } else if (condition.includes("snow")) {
                 document.body.classList.add("snowy");
+            } else if (condition.includes("fog")) {
+                document.body.classList.add("foggy");
+            } else if (condition.includes("thunder")) {
+                document.body.classList.add("thunderstorm");
             } else {
                 document.body.classList.add("clear");
             }
