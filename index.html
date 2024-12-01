@@ -173,9 +173,30 @@
         .developer-info a:hover {
             color: #4CAF50;
         }
+
+        /* 北京时间样式 */
+        .beijing-time {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #6dd5ed, #2193b0);
+            color: transparent;
+            -webkit-background-clip: text;
+            animation: timeGradient 5s linear infinite;
+            font-weight: bold;
+        }
+
+        @keyframes timeGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
     </style>
 </head>
 <body>
+    <div class="beijing-time" id="beijingTime">北京时间：加载中...</div>
+
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
@@ -233,6 +254,18 @@
                 console.error(error);
             }
         }
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `北京时间：${hours}:${minutes}:${seconds}`;
+            document.getElementById("beijingTime").textContent = timeString;
+        }
+
+        setInterval(updateTime, 1000); // 每秒更新一次北京时间
+        updateTime(); // 页面加载时立即显示时间
     </script>
 </body>
 </html>
