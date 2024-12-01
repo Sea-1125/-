@@ -109,6 +109,22 @@
       max-width: 600px;
     }
 
+    .social-icons {
+      margin-top: 20px;
+    }
+
+    .social-icons a {
+      color: #00e5ff;
+      margin: 0 10px;
+      font-size: 24px;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      color: #00bcd4;
+      transform: scale(1.2);
+    }
+
     /* 联系方式 */
     .contact {
       padding: 100px 10%;
@@ -182,46 +198,7 @@
       margin-bottom: 20px;
     }
 
-    .timeline-item {
-      margin-bottom: 20px;
-      position: relative;
-      padding-left: 20px;
-    }
-
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 5px;
-      width: 10px;
-      height: 10px;
-      background: #00bcd4;
-      border-radius: 50%;
-    }
-
-    /* 动画效果 */
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes scaleIn {
-      0% {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
+    /* 动态背景 */
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -231,73 +208,3 @@
 </head>
 <body>
   <!-- 顶部导航栏 -->
-  <header id="main-header">
-    <nav>
-      <a href="#about">关于我</a>
-      <a href="#skills">技能</a>
-      <a href="#contact">联系我</a>
-    </nav>
-  </header>
-
-  <!-- 英雄区 -->
-  <section class="hero" id="about">
-    <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="头像">
-    <h2>@Adventure</h2>
-    <p>你那熟练的交际手法 总让我以为是爱情</p>
-  </section>
-
-  <!-- 技能展示 -->
-  <section class="skills" id="skills">
-    <h3>我的技能</h3>
-    <div class="skill">
-      <p>JavaScript</p>
-      <div class="progress-bar">
-        <div class="progress" style="width: 90%;"></div>
-      </div>
-    </div>
-    <div class="skill">
-      <p>Python</p>
-      <div class="progress-bar">
-        <div class="progress" style="width: 80%;"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 时间轴 -->
-  <section class="timeline">
-    <h3>我的经历</h3>
-    <div class="timeline-item">
-      <p>2023 - 创办个人项目</p>
-    </div>
-    <div class="timeline-item">
-      <p>2024 - 发布第一款产品</p>
-    </div>
-  </section>
-
-  <!-- 联系方式 -->
-  <section class="contact" id="contact">
-    <h3>联系我</h3>
-    <p>QQ: 1423023756</p>
-    <p>Email: <a href="mailto:cxezysyf4843@gmail.com">cxezysyf4843@gmail.com</a></p>
-    <p>Telegram: <a href="https://t.me/liwuyyds">@liwuyyds</a></p>
-  </section>
-
-  <!-- 页脚 -->
-  <footer>
-    &copy; 2024 Adventure. All rights reserved.
-  </footer>
-
-  <script>
-    // 导航栏滚动动态效果
-    const header = document.getElementById("main-header");
-
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 50) {
-        header.classList.add("scrolled");
-      } else {
-        header.classList.remove("scrolled");
-      }
-    });
-  </script>
-</body>
-</html>
