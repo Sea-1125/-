@@ -3,183 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea - AI Chat</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <title>点击小方块游戏</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #202123;
-      color: #FFFFFF;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .chat-container {
-      width: 100%;
-      max-width: 800px;
-      height: 90vh;
       display: flex;
       flex-direction: column;
-      background: #333333;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-    .chat-header {
-      padding: 20px;
-      background: #444444;
-      display: flex;
       align-items: center;
-      gap: 15px;
-      font-size: 18px;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
     }
-    .chat-header img {
+
+    h1 {
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .score {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .game-area {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .square {
+      position: absolute;
       width: 50px;
       height: 50px;
-      border-radius: 50%;
-    }
-    .chat-header span {
-      font-weight: bold;
-    }
-    .chat-box {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #202123;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .chat-box::-webkit-scrollbar {
-      width: 8px;
-    }
-    .chat-box::-webkit-scrollbar-thumb {
-      background: #666;
-      border-radius: 4px;
-    }
-    .message {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-    .message.user {
-      justify-content: flex-end;
-    }
-    .message.user .content {
-      background: #007aff;
-      color: #fff;
-    }
-    .message.bot {
-      justify-content: flex-start;
-    }
-    .message .content {
-      padding: 10px 15px;
-      border-radius: 8px;
-      max-width: 70%;
-      font-size: 14px;
-    }
-    .message.user .content {
-      background: #007aff;
-      color: #fff;
-    }
-    .message.bot .content {
-      background: #444444;
-      color: #FFFFFF;
-    }
-    .chat-input {
-      padding: 10px;
-      display: flex;
-      gap: 10px;
-      background: #444444;
-    }
-    .chat-input textarea {
-      flex: 1;
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      resize: none;
-      outline: none;
-      font-size: 14px;
-      color: #fff;
-      background: #202123;
-    }
-    .chat-input button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 6px;
-      background: #007aff;
-      color: #fff;
+      background: #ff5722;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
+      animation: fadeInOut 1.2s ease-in-out infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: #007aff;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
       transition: background 0.3s ease;
     }
-    .chat-input button:hover {
+
+    button:hover {
       background: #005bb5;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea Avatar">
-      <span>Sea - AI Chat</span>
-    </div>
-    <div class="chat-box" id="chat-box"></div>
-    <div class="chat-input">
-      <textarea id="user-input" placeholder="Type your message here..."></textarea>
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
+  <h1>点击小方块</h1>
+  <div class="score">得分: <span id="score">0</span></div>
+  <div class="game-area" id="game-area"></div>
+  <button onclick="restartGame()">重新开始</button>
+
   <script>
-    const chatBox = document.getElementById("chat-box");
-    const userInput = document.getElementById("user-input");
+    const gameArea = document.getElementById("game-area");
+    const scoreDisplay = document.getElementById("score");
+    let score = 0;
+    let square;
 
-    // 添加消息到聊天框
-    function addMessage(content, sender) {
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add("message", sender);
-
-      const contentDiv = document.createElement("div");
-      contentDiv.classList.add("content");
-      contentDiv.textContent = content;
-
-      messageDiv.appendChild(contentDiv);
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
+    function getRandomPosition(max) {
+      return Math.floor(Math.random() * (max - 50)); // 确保方块不会超出边界
     }
 
-    // 调用 Hugging Face API
-    async function fetchResponse(message) {
-      addMessage("Sea is typing...", "bot");
-      const response = await fetch("https://api-inference.huggingface.co/models/openai-community/gpt2", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer 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",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ inputs: message })
+    function createSquare() {
+      if (square) square.remove(); // 移除上一个方块
+
+      square = document.createElement("div");
+      square.classList.add("square");
+      square.style.top = `${getRandomPosition(gameArea.clientHeight)}px`;
+      square.style.left = `${getRandomPosition(gameArea.clientWidth)}px`;
+
+      square.addEventListener("click", () => {
+        score++;
+        scoreDisplay.textContent = score;
+        createSquare(); // 点击后生成下一个方块
       });
 
-      const data = await response.json();
-      chatBox.lastChild.remove(); // 移除 "Sea is typing..."
-      return data.generated_text || "I'm sorry, I couldn't process your request.";
+      gameArea.appendChild(square);
     }
 
-    // 发送消息
-    async function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message) return;
-
-      addMessage(message, "user");
-      userInput.value = "";
-
-      const reply = await fetchResponse(message);
-      addMessage(reply, "bot");
+    function restartGame() {
+      score = 0;
+      scoreDisplay.textContent = score;
+      createSquare();
     }
+
+    // 初始化游戏
+    restartGame();
   </script>
 </body>
 </html>
