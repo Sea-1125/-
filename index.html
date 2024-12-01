@@ -57,12 +57,12 @@
             margin-bottom: 30px;
             font-weight: 700;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
             background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #ff9a9e);
-            background-size: 300% 300%;
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradient 5s ease infinite, glow 1.5s ease-in-out infinite;
+            animation: gradient 8s ease infinite;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes gradient {
@@ -74,15 +74,6 @@
             }
             100% {
                 background-position: 0% 50%;
-            }
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
             }
         }
 
@@ -151,6 +142,37 @@
             margin: 8px 0;
             font-size: 1.3rem;
         }
+
+        .developer-info {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 1rem;
+            color: #bbb;
+        }
+
+        .developer-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .developer-info p {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .developer-info a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .developer-info a:hover {
+            color: #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -168,6 +190,14 @@
             <p id="humidity"></p>
             <p id="wind-speed"></p>
         </div>
+    </div>
+
+    <div class="developer-info">
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
+        <p>Sea</p>
+        <p>Email: cxezysyf4843@gmail.com</p>
+        <p>Telegram: liwuyyds</p>
+        <p>© 2024 Sea Studio</p>
     </div>
 
     <script>
