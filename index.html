@@ -22,6 +22,7 @@
             color: #fff;
             overflow: hidden;
             background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            animation: gradient-bg 15s ease infinite;
         }
 
         .weather-container {
@@ -119,39 +120,23 @@
             color: #999;
         }
 
-        .input-hint {
-            font-size: 1rem;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        /* 动态背景变化 */
-        .clear {
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
-        }
-
-        .cloudy {
-            background: linear-gradient(135deg, rgba(176, 224, 230, 0.6), rgba(211, 211, 211, 0.6));
-        }
-
-        .rainy {
-            background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
-        }
-
-        .stormy {
-            background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
-        }
-
-        .snowy {
-            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
-        }
-
-        .foggy {
-            background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
-        }
-
-        .thunderstorm {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+        /* 动态渐变背景效果 */
+        @keyframes gradient-bg {
+            0% {
+                background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            }
+            25% {
+                background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
+            }
+            50% {
+                background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
+            }
+            75% {
+                background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            }
+            100% {
+                background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+            }
         }
 
     </style>
@@ -160,7 +145,6 @@
     <div class="weather-container">
         <h1>实时天气查询</h1>
         <div class="search-bar">
-            <div class="input-hint">请输入城市名（全英文）</div>
             <input type="text" id="city" placeholder="请输入城市名（全英文）" oninput="capitalizeCity()" autocomplete="off" />
             <button onclick="getWeather()">查询</button>
         </div>
@@ -209,10 +193,6 @@
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
-                // 根据天气条件更新背景
-                const weatherCondition = data.weather[0].main.toLowerCase();
-                changeBackground(weatherCondition);
-
                 document.getElementById("weather-info").style.display = "block"; // 显示天气信息
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
@@ -224,32 +204,9 @@
             const input = document.getElementById("city");
             let value = input.value;
 
-            // 强制转换为英文并让首字母大写
-            value = value.replace(/[^A-Za-z]/g, ""); // 移除非字母字符
-
+            // 首字母大写，其余字母小写
             if (value.length > 0) {
                 input.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-            }
-        }
-
-        // 根据天气条件更新背景
-        function changeBackground(condition) {
-            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
-
-            if (condition === "clear") {
-                document.body.classList.add("clear");
-            } else if (condition === "clouds") {
-                document.body.classList.add("cloudy");
-            } else if (condition === "rain") {
-                document.body.classList.add("rainy");
-            } else if (condition === "storm") {
-                document.body.classList.add("stormy");
-            } else if (condition === "snow") {
-                document.body.classList.add("snowy");
-            } else if (condition === "fog") {
-                document.body.classList.add("foggy");
-            } else {
-                document.body.classList.add("cloudy");
             }
         }
     </script>
