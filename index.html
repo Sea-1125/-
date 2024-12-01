@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea Battle Arena</title>
+  <title>Sea战斗竞技场</title>
   <style>
+    /* 页面样式 */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -47,34 +48,70 @@
       margin: 0;
       background: #10121a;
     }
+
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      background: #1a1a2e;
+      border: 2px solid white;
+      border-radius: 50%;
+      color: white;
+      text-align: center;
+      line-height: 60px;
+      font-size: 24px;
+      user-select: none;
+    }
+
+    .control-btn:active {
+      background: #00d8ff;
+    }
   </style>
 </head>
 <body>
   <div class="game-header">
     <div class="developer-info">
-      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Developer Avatar">
-      <span>Developed by Sea</span>
+      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="开发者头像">
+      <span>开发者：Sea</span>
     </div>
     <div class="score-board">
-      Score: <span id="score">0</span>
+      分数：<span id="score">0</span>
     </div>
   </div>
   <canvas id="gameCanvas"></canvas>
+
+  <!-- 控制按钮 -->
+  <div class="controls">
+    <div class="control-btn" id="up">↑</div>
+    <div class="control-btn" id="left">←</div>
+    <div class="control-btn" id="shoot">射击</div>
+    <div class="control-btn" id="right">→</div>
+    <div class="control-btn" id="down">↓</div>
+  </div>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Adjust canvas size
+    // 适配手机屏幕
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Game variables
+    // 游戏变量
     let score = 0;
     let isGameOver = false;
-    const keys = {};
 
-    // Player object
+    // 玩家对象
     const player = {
       x: canvas.width / 2,
       y: canvas.height / 2,
@@ -83,74 +120,82 @@
       color: "#00d8ff",
     };
 
-    // Enemies
+    // 敌人和子弹
     const enemies = [];
-    const enemySpeed = 2;
-
-    // Projectiles
     const projectiles = [];
 
-    // Handle key presses
-    window.addEventListener("keydown", (e) => (keys[e.key] = true));
-    window.addEventListener("keyup", (e) => (keys[e.key] = false));
+    // 方向控制状态
+    const controls = { up: false, down: false, left: false, right: false };
 
-    // Fire projectiles
-    window.addEventListener("keypress", (e) => {
-      if (e.key === " ") {
-        projectiles.push({
-          x: player.x,
-          y: player.y,
-          size: 5,
-          speed: 8,
-          color: "#00ff00",
-        });
-      }
+    // 事件监听器
+    document.getElementById("up").addEventListener("mousedown", () => (controls.up = true));
+    document.getElementById("down").addEventListener("mousedown", () => (controls.down = true));
+    document.getElementById("left").addEventListener("mousedown", () => (controls.left = true));
+    document.getElementById("right").addEventListener("mousedown", () => (controls.right = true));
+    document.getElementById("shoot").addEventListener("mousedown", fireProjectile);
+
+    document.querySelectorAll(".control-btn").forEach((btn) => {
+      btn.addEventListener("mouseup", () => {
+        controls.up = false;
+        controls.down = false;
+        controls.left = false;
+        controls.right = false;
+      });
     });
 
-    // Update game
+    // 开火
+    function fireProjectile() {
+      projectiles.push({
+        x: player.x,
+        y: player.y,
+        size: 5,
+        speed: 8,
+        color: "#00ff00",
+      });
+    }
+
+    // 更新游戏
     function update() {
       if (isGameOver) return;
 
-      // Move player
-      if (keys["ArrowUp"] && player.y > 0) player.y -= player.speed;
-      if (keys["ArrowDown"] && player.y < canvas.height - player.size)
-        player.y += player.speed;
-      if (keys["ArrowLeft"] && player.x > 0) player.x -= player.speed;
-      if (keys["ArrowRight"] && player.x < canvas.width - player.size)
-        player.x += player.speed;
+      // 玩家移动
+      if (controls.up && player.y > 0) player.y -= player.speed;
+      if (controls.down && player.y < canvas.height - player.size) player.y += player.speed;
+      if (controls.left && player.x > 0) player.x -= player.speed;
+      if (controls.right && player.x < canvas.width - player.size) player.x += player.speed;
 
-      // Move projectiles
+      // 子弹移动
       for (let i = projectiles.length - 1; i >= 0; i--) {
         projectiles[i].y -= projectiles[i].speed;
         if (projectiles[i].y < 0) projectiles.splice(i, 1);
       }
 
-      // Spawn enemies
+      // 敌人生成
       if (Math.random() < 0.02) {
         enemies.push({
           x: Math.random() * canvas.width,
           y: -20,
           size: 20 + Math.random() * 20,
           color: "#ff5722",
-          speed: enemySpeed + Math.random() * 2,
+          speed: 2 + Math.random() * 2,
         });
       }
 
-      // Move enemies
+      // 敌人移动
       for (let i = enemies.length - 1; i >= 0; i--) {
         enemies[i].y += enemies[i].speed;
 
-        // Check collision with player
+        // 检测玩家碰撞
         if (
           Math.abs(enemies[i].x - player.x) < player.size &&
           Math.abs(enemies[i].y - player.y) < player.size
         ) {
           isGameOver = true;
-          alert("Game Over! Final Score: " + score);
+          alert(`游戏结束！最终得分：${score}`);
           window.location.reload();
         }
 
-        // Check collision with projectiles
+        // 检测子弹碰撞
         for (let j = projectiles.length - 1; j >= 0; j--) {
           if (
             Math.abs(enemies[i].x - projectiles[j].x) < enemies[i].size &&
@@ -164,7 +209,7 @@
           }
         }
 
-        // Remove enemies that leave the screen
+        // 移除屏幕外的敌人
         if (enemies[i] && enemies[i].y > canvas.height) {
           enemies.splice(i, 1);
         }
@@ -173,22 +218,21 @@
       draw();
     }
 
-    // Draw everything
+    // 绘制
     function draw() {
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw player
+      // 绘制玩家
       ctx.fillStyle = player.color;
       ctx.fillRect(player.x - player.size / 2, player.y - player.size / 2, player.size, player.size);
 
-      // Draw projectiles
+      // 绘制子弹
       projectiles.forEach((proj) => {
         ctx.fillStyle = proj.color;
         ctx.fillRect(proj.x - proj.size / 2, proj.y - proj.size / 2, proj.size, proj.size);
       });
 
-      // Draw enemies
+      // 绘制敌人
       enemies.forEach((enemy) => {
         ctx.fillStyle = enemy.color;
         ctx.beginPath();
