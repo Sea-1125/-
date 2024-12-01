@@ -48,15 +48,6 @@
             padding-right: 10px;
         }
         
-        .chat-box::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .chat-box::-webkit-scrollbar-thumb {
-            background-color: #ddd;
-            border-radius: 4px;
-        }
-        
         .message {
             display: flex;
             gap: 10px;
@@ -162,6 +153,8 @@
             const message = userInput.value.trim();
             if (!message) return;
 
+            console.log("发送消息: ", message);  // 调试输出
+
             addMessage(message, "user");
 
             // 保存到 Firebase 实时数据库
@@ -171,7 +164,7 @@
                 timestamp: Date.now()
             });
 
-            userInput.value = "";
+            userInput.value = "";  // 清空输入框
         }
 
         // 添加消息到聊天框
@@ -180,25 +173,4 @@
             messageDiv.classList.add("message", sender);
 
             const avatarDiv = document.createElement("div");
-            avatarDiv.classList.add("avatar");
-            messageDiv.appendChild(avatarDiv);
-
-            const textDiv = document.createElement("div");
-            textDiv.classList.add("text");
-            textDiv.textContent = content;
-            messageDiv.appendChild(textDiv);
-
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;  // 自动滚动到底部
-        }
-
-        // 启动时加载已有的聊天记录
-        firebase.database().ref('messages').on('child_added', (snapshot) => {
-            const data = snapshot.val();
-            const sender = data.user;
-            const message = data.message;
-            addMessage(message, sender === username ? "user" : "other");
-        });
-    </script>
-</body>
-</html>
+            avatarDiv.classList
