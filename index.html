@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>实时天气</title>
     <style>
-        /* 通用样式 */
         * {
             margin: 0;
             padding: 0;
@@ -19,32 +18,27 @@
             align-items: center;
             flex-direction: column;
             height: 100vh;
-            background: linear-gradient(to bottom, #1e3c72, #2a5298);
-            color: #fff;
-            overflow: hidden;
             transition: background 1s ease;
-            position: relative;
+            overflow: hidden;
+            color: #fff;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-
-        /* 天气容器 */
         .weather-container {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.5);
             border-radius: 15px;
             padding: 30px;
             width: 90%;
             max-width: 500px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 2;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #ffffff;
         }
 
         .search-bar {
@@ -113,8 +107,8 @@
         }
 
         .developer-info img {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             margin-bottom: 10px;
         }
@@ -123,10 +117,46 @@
             color: #999;
         }
 
-        .input-tip {
-            font-size: 0.9rem;
-            margin-top: 10px;
-            color: #ddd;
+        /* 动态天气背景 */
+        .clear {
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .cloudy {
+            background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .rainy {
+            background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .stormy {
+            background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .snowy {
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .foggy {
+            background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        .thunderstorm {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        @keyframes gradient-bg {
+            0% { background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6)); }
+            50% { background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7)); }
+            100% { background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8)); }
         }
     </style>
 </head>
@@ -134,10 +164,9 @@
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
-            <input type="text" id="city" placeholder="请输入城市 (首字母大写英文)" oninput="capitalizeFirstLetter()" />
+            <input type="text" id="city" placeholder="请输入城市名" oninput="capitalizeCity()" autocomplete="off" />
             <button onclick="getWeather()">查询</button>
         </div>
-        <div class="input-tip">请输入纯英文，且首字母大写的城市名称</div>
         <div id="weather-info" class="weather-info">
             <h2 id="city-name"></h2>
             <p id="description"></p>
@@ -148,8 +177,8 @@
     </div>
 
     <div class="developer-info">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
-        <p>@Sea</p>
+        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
+        <p>Sea</p>
         <p>Email: cxezysyf4843@gmail.com</p>
         <p>© 2024 Sea Studio</p>
     </div>
@@ -157,29 +186,10 @@
     <script>
         const apiKey = '383a13d285204172eaa9b867cc08225c';
 
-        // 自动将首字母大写
-        function capitalizeFirstLetter() {
-            const inputField = document.getElementById("city");
-            let cityName = inputField.value.trim();
-            if (cityName.length > 0) {
-                cityName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
-                inputField.value = cityName;
-            }
-        }
-
-        // 输入验证：纯英文，首字母大写
-        function validateInput(city) {
-            const regex = /^[A-Z][a-z]*$/; // 纯英文，首字母大写
-            return regex.test(city);
-        }
-
         async function getWeather() {
-            const cityInput = document.getElementById("city");
-            const city = cityInput.value.trim();
-
-            // 检查输入是否符合要求
-            if (!validateInput(city)) {
-                alert("请输入纯英文城市名称，且首字母需大写！");
+            const city = document.getElementById("city").value;
+            if (!city) {
+                alert("请输入城市名称");
                 return;
             }
 
@@ -189,25 +199,27 @@
                 const response = await fetch(url);
                 const data = await response.json();
 
-                // 处理城市未找到的情况
                 if (data.cod === "404") {
                     alert("城市未找到！");
                     return;
                 }
 
                 // 更新界面上的天气信息
-                document.getElementById("city-name").textContent = `${data.name} (${data.sys.country})`;
-                document.getElementById("description").textContent = `天气: ${data.weather[0].description}`;
+                document.getElementById("city-name").textContent = data.name + " " + data.sys.country;
+                document.getElementById("description").textContent = data.weather[0].description;
                 document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
-                // 显示天气信息
-                document.getElementById("weather-info").style.display = "block";
+                // 根据天气类型更改背景
+                const weatherCondition = data.weather[0].main.toLowerCase();
+                changeBackground(weatherCondition);
+
+                document.getElementById("weather-info").style.display = "block"; // 显示天气信息
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
             }
         }
-    </script>
-</body>
-</html>
+
+        function changeBackground(condition) {
+            document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy
