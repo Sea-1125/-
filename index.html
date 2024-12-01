@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时天气应用</title>
+    <title>实时天气</title>
     <style>
         * {
             margin: 0;
@@ -12,54 +12,75 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             height: 100vh;
-            transition: background 2s, color 1s;
+            transition: background 1s ease;
+            overflow: hidden;
+            color: #fff;
         }
 
         .weather-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
             max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             font-weight: bold;
+            color: #ffffff;
         }
 
         .search-bar {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         #city {
-            padding: 10px;
-            width: 80%;
+            padding: 12px 20px;
+            width: 70%;
+            border: none;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.2rem;
             margin-right: 10px;
             text-transform: capitalize;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+
+        #city:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
         button {
-            padding: 10px;
+            padding: 12px 20px;
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
         }
 
         button:hover {
             background-color: #45a049;
+            transform: scale(1.1);
         }
 
         .weather-info {
@@ -68,15 +89,17 @@
         }
 
         .weather-info h2 {
-            font-size: 1.5rem;
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
 
         .weather-info p {
             font-size: 1.2rem;
+            margin: 5px 0;
         }
 
         .developer-info {
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
             font-size: 1rem;
         }
@@ -88,31 +111,46 @@
             margin-bottom: 10px;
         }
 
+        .developer-info p {
+            color: #999;
+        }
+
         /* 动态天气背景 */
         .clear {
-            background: linear-gradient(135deg, #87CEEB, #1E90FF);
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .cloudy {
-            background: linear-gradient(135deg, #B0C4DE, #D3D3D3);
+            background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .rainy {
-            background: linear-gradient(135deg, #708090, #2F4F4F);
+            background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .stormy {
-            background: linear-gradient(135deg, #696969, #333333);
+            background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .snowy {
-            background: linear-gradient(135deg, #F0F8FF, #B0E0E6);
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            animation: gradient-bg 10s ease infinite;
+        }
+
+        @keyframes gradient-bg {
+            0% { background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6)); }
+            50% { background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7)); }
+            100% { background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8)); }
         }
     </style>
 </head>
 <body>
     <div class="weather-container">
-        <h1>实时天气应用</h1>
+        <h1>实时天气</h1>
         <div class="search-bar">
             <input type="text" id="city" placeholder="Enter City Name" />
             <button onclick="getWeather()">查询</button>
@@ -128,14 +166,14 @@
 
     <div class="developer-info">
         <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="@" />
-        <p>开发者: @</p>
+        <p>@Sea</p>
+        <p>Email：cxezysyf4843@gmail.com</p>
+        <p>© 2024 Sea Studio</p>
     </div>
 
     <script>
-        // 替换为你的 OpenWeatherMap API 密钥
         const apiKey = '383a13d285204172eaa9b867cc08225c';
 
-        // 获取天气信息
         async function getWeather() {
             const city = document.getElementById("city").value;
             if (!city) {
@@ -171,7 +209,6 @@
             }
         }
 
-        // 根据天气类型更改背景色
         function changeBackground(condition) {
             document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy");
 
