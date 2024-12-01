@@ -3,119 +3,203 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>点击小方块游戏</title>
+  <title>Sea Battle Arena</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      font-family: Arial, sans-serif;
+      background-color: #0a0c1a;
+      color: white;
     }
 
-    h1 {
-      color: #fff;
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .score {
-      color: #fff;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .game-area {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .square {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background: #ff5722;
-      border-radius: 5px;
-      cursor: pointer;
-      animation: fadeInOut 1.2s ease-in-out infinite;
-    }
-
-    @keyframes fadeInOut {
-      0%, 100% {
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-    }
-
-    button {
-      margin-top: 20px;
+    .game-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background: #007aff;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1a1a2e;
+      color: white;
+      z-index: 1000;
     }
 
-    button:hover {
-      background: #005bb5;
+    .developer-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .developer-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .score-board {
+      font-size: 18px;
+    }
+
+    canvas {
+      display: block;
+      margin: 0;
+      background: #10121a;
     }
   </style>
 </head>
 <body>
-  <h1>点击小方块</h1>
-  <div class="score">得分: <span id="score">0</span></div>
-  <div class="game-area" id="game-area"></div>
-  <button onclick="restartGame()">重新开始</button>
+  <div class="game-header">
+    <div class="developer-info">
+      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Developer Avatar">
+      <span>Developed by Sea</span>
+    </div>
+    <div class="score-board">
+      Score: <span id="score">0</span>
+    </div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
 
   <script>
-    const gameArea = document.getElementById("game-area");
-    const scoreDisplay = document.getElementById("score");
-    let score = 0;
-    let square;
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-    function getRandomPosition(max) {
-      return Math.floor(Math.random() * (max - 50)); // 确保方块不会超出边界
+    // Adjust canvas size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Game variables
+    let score = 0;
+    let isGameOver = false;
+    const keys = {};
+
+    // Player object
+    const player = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      size: 30,
+      speed: 5,
+      color: "#00d8ff",
+    };
+
+    // Enemies
+    const enemies = [];
+    const enemySpeed = 2;
+
+    // Projectiles
+    const projectiles = [];
+
+    // Handle key presses
+    window.addEventListener("keydown", (e) => (keys[e.key] = true));
+    window.addEventListener("keyup", (e) => (keys[e.key] = false));
+
+    // Fire projectiles
+    window.addEventListener("keypress", (e) => {
+      if (e.key === " ") {
+        projectiles.push({
+          x: player.x,
+          y: player.y,
+          size: 5,
+          speed: 8,
+          color: "#00ff00",
+        });
+      }
+    });
+
+    // Update game
+    function update() {
+      if (isGameOver) return;
+
+      // Move player
+      if (keys["ArrowUp"] && player.y > 0) player.y -= player.speed;
+      if (keys["ArrowDown"] && player.y < canvas.height - player.size)
+        player.y += player.speed;
+      if (keys["ArrowLeft"] && player.x > 0) player.x -= player.speed;
+      if (keys["ArrowRight"] && player.x < canvas.width - player.size)
+        player.x += player.speed;
+
+      // Move projectiles
+      for (let i = projectiles.length - 1; i >= 0; i--) {
+        projectiles[i].y -= projectiles[i].speed;
+        if (projectiles[i].y < 0) projectiles.splice(i, 1);
+      }
+
+      // Spawn enemies
+      if (Math.random() < 0.02) {
+        enemies.push({
+          x: Math.random() * canvas.width,
+          y: -20,
+          size: 20 + Math.random() * 20,
+          color: "#ff5722",
+          speed: enemySpeed + Math.random() * 2,
+        });
+      }
+
+      // Move enemies
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        enemies[i].y += enemies[i].speed;
+
+        // Check collision with player
+        if (
+          Math.abs(enemies[i].x - player.x) < player.size &&
+          Math.abs(enemies[i].y - player.y) < player.size
+        ) {
+          isGameOver = true;
+          alert("Game Over! Final Score: " + score);
+          window.location.reload();
+        }
+
+        // Check collision with projectiles
+        for (let j = projectiles.length - 1; j >= 0; j--) {
+          if (
+            Math.abs(enemies[i].x - projectiles[j].x) < enemies[i].size &&
+            Math.abs(enemies[i].y - projectiles[j].y) < enemies[i].size
+          ) {
+            enemies.splice(i, 1);
+            projectiles.splice(j, 1);
+            score += 10;
+            document.getElementById("score").textContent = score;
+            break;
+          }
+        }
+
+        // Remove enemies that leave the screen
+        if (enemies[i] && enemies[i].y > canvas.height) {
+          enemies.splice(i, 1);
+        }
+      }
+
+      draw();
     }
 
-    function createSquare() {
-      if (square) square.remove(); // 移除上一个方块
+    // Draw everything
+    function draw() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      square = document.createElement("div");
-      square.classList.add("square");
-      square.style.top = `${getRandomPosition(gameArea.clientHeight)}px`;
-      square.style.left = `${getRandomPosition(gameArea.clientWidth)}px`;
+      // Draw player
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x - player.size / 2, player.y - player.size / 2, player.size, player.size);
 
-      square.addEventListener("click", () => {
-        score++;
-        scoreDisplay.textContent = score;
-        createSquare(); // 点击后生成下一个方块
+      // Draw projectiles
+      projectiles.forEach((proj) => {
+        ctx.fillStyle = proj.color;
+        ctx.fillRect(proj.x - proj.size / 2, proj.y - proj.size / 2, proj.size, proj.size);
       });
 
-      gameArea.appendChild(square);
+      // Draw enemies
+      enemies.forEach((enemy) => {
+        ctx.fillStyle = enemy.color;
+        ctx.beginPath();
+        ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(update);
     }
 
-    function restartGame() {
-      score = 0;
-      scoreDisplay.textContent = score;
-      createSquare();
-    }
-
-    // 初始化游戏
-    restartGame();
+    update();
   </script>
 </body>
 </html>
