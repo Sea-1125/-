@@ -18,69 +18,94 @@
             align-items: center;
             flex-direction: column;
             height: 100vh;
-            transition: background 1s ease;
-            color: #fff;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+            background-size: cover;
             animation: gradient-bg 15s ease infinite;
+            color: white;
+            transition: background 2s ease;
+        }
+
+        @keyframes gradient-bg {
+            0% {
+                background: linear-gradient(135deg, rgba(135, 206, 235, 0.8), rgba(30, 144, 255, 0.8));
+            }
+            50% {
+                background: linear-gradient(135deg, rgba(47, 79, 79, 0.8), rgba(112, 128, 144, 0.8));
+            }
+            100% {
+                background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            }
         }
 
         .weather-container {
-            background-color: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
             padding: 30px;
-            width: 90%;
-            max-width: 500px;
+            width: 80%;
+            max-width: 550px;
             text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-30px);
+            animation: slideIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 20px;
-            color: white;
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .search-bar {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
+            position: relative;
         }
 
         #city {
-            padding: 12px 20px;
-            width: 80%;
-            border: none;
-            border-radius: 20px;
-            background-color: rgba(255, 255, 255, 0.2);
+            padding: 14px 20px;
+            width: 70%;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            text-align: center;
             text-transform: capitalize;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+            margin-right: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
         #city:focus {
             outline: none;
-            background-color: rgba(255, 255, 255, 0.3);
+            border-color: #4CAF50;
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         button {
-            padding: 12px 20px;
-            cursor: pointer;
+            padding: 14px 25px;
             background-color: #4CAF50;
             color: white;
-            border: none;
-            border-radius: 30px;
             font-size: 1.2rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
         button:hover {
@@ -91,54 +116,51 @@
         .weather-info {
             display: none;
             margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .weather-info h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
         .weather-info p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin: 5px 0;
+            opacity: 0.8;
         }
 
         .developer-info {
-            margin-top: 30px;
+            margin-top: 50px;
             text-align: center;
             font-size: 1rem;
         }
 
         .developer-info img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .developer-info p {
-            color: #999;
+            color: #bbb;
         }
 
-        /* 动态渐变背景效果 */
-        @keyframes gradient-bg {
-            0% {
-                background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
-            }
-            25% {
-                background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
-            }
-            50% {
-                background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
-            }
-            75% {
-                background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
-            }
-            100% {
-                background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
-            }
+        .developer-info p a {
+            color: #4CAF50;
+            text-decoration: none;
         }
-
     </style>
 </head>
 <body>
@@ -160,14 +182,13 @@
     <div class="developer-info">
         <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea" />
         <p>Sea</p>
-        <p>Email: cxezysyf4843@gmail.com</p>
+        <p>Email: <a href="mailto:cxezysyf4843@gmail.com">cxezysyf4843@gmail.com</a></p>
         <p>© 2024 Sea Studio</p>
     </div>
 
     <script>
         const apiKey = '383a13d285204172eaa9b867cc08225c';
 
-        // 获取天气信息
         async function getWeather() {
             const city = document.getElementById("city").value;
             if (!city) {
@@ -186,14 +207,14 @@
                     return;
                 }
 
-                // 更新天气信息
                 document.getElementById("city-name").textContent = data.name + " " + data.sys.country;
                 document.getElementById("description").textContent = data.weather[0].description;
                 document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
                 document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
                 document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed}米/秒`;
 
-                document.getElementById("weather-info").style.display = "block"; // 显示天气信息
+                document.getElementById("weather-info").style.display = "block";
+
             } catch (error) {
                 alert("获取天气信息失败，请稍后再试！");
             }
