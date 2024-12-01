@@ -18,33 +18,36 @@
             align-items: center;
             flex-direction: column;
             height: 100vh;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1));
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
             overflow: hidden;
-            color: #fff;
             transition: background 1s ease;
         }
 
         .weather-container {
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
             padding: 40px;
             width: 90%;
-            max-width: 700px;
+            max-width: 600px;
             text-align: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.5s ease-in-out;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .weather-container:hover {
-            transform: translateY(-10px);
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.2rem;
             margin-bottom: 30px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .search-bar {
@@ -56,10 +59,10 @@
 
         #city {
             padding: 15px 25px;
-            width: 85%;
+            width: 80%;
             border: none;
             border-radius: 25px;
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 1.5rem;
             text-transform: capitalize;
@@ -70,7 +73,7 @@
 
         #city:focus {
             outline: none;
-            background-color: rgba(255, 255, 255, 0.25);
+            background-color: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
 
@@ -80,12 +83,12 @@
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 35px;
+            border-radius: 50px;
             font-size: 1.3rem;
             transition: all 0.3s ease;
             text-transform: uppercase;
             font-weight: bold;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
 
         button:hover {
@@ -99,6 +102,7 @@
             font-size: 1.2rem;
             line-height: 1.8;
             transition: opacity 0.5s ease;
+            text-align: left;
         }
 
         .weather-info h2 {
@@ -116,61 +120,67 @@
             margin-top: 40px;
             text-align: center;
             font-size: 1rem;
-            color: #aaa;
+            color: #bbb;
         }
 
         .developer-info img {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            margin-bottom: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .developer-info img:hover {
-            transform: scale(1.1);
-        }
-
-        .input-hint {
-            font-size: 1rem;
-            color: #ddd;
             margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .developer-info p {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .developer-info a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .developer-info a:hover {
+            color: #4CAF50;
         }
 
         /* 动态天气背景 */
         .clear {
-            background: url('https://source.unsplash.com/1600x900/?clear-sky') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(30, 144, 255, 0.6));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .cloudy {
-            background: url('https://source.unsplash.com/1600x900/?cloudy') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(176, 224, 230, 0.7), rgba(211, 211, 211, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .rainy {
-            background: url('https://source.unsplash.com/1600x900/?rainy') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(112, 128, 144, 0.6), rgba(47, 79, 79, 0.6));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .stormy {
-            background: url('https://source.unsplash.com/1600x900/?storm') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(105, 105, 105, 0.7), rgba(51, 51, 51, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .snowy {
-            background: url('https://source.unsplash.com/1600x900/?snow') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(240, 248, 255, 0.8), rgba(176, 224, 230, 0.8));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .foggy {
-            background: url('https://source.unsplash.com/1600x900/?fog') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(169, 169, 169, 0.7), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         .thunderstorm {
-            background: url('https://source.unsplash.com/1600x900/?thunderstorm') no-repeat center center/cover;
-            animation: gradient-bg 12s ease infinite;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(105, 105, 105, 0.7));
+            animation: gradient-bg 10s ease infinite;
         }
 
         @keyframes gradient-bg {
@@ -184,10 +194,10 @@
     <div class="weather-container">
         <h1>实时天气</h1>
         <div class="search-bar">
-            <div class="input-hint">请输入城市名（纯英文）</div>
             <input type="text" id="city" placeholder="请输入城市名" />
             <button onclick="getWeather()">查询</button>
         </div>
+        <p style="font-size: 1rem; margin-top: 10px; color: #ddd;">请输入纯英文城市名，首字母自动大写</p>
         <div id="weather-info" class="weather-info">
             <h2 id="city-name"></h2>
             <p id="description"></p>
@@ -227,34 +237,35 @@
 
                 // 更新界面上的天气信息
                 document.getElementById("city-name").textContent = data.name + " " + data.sys.country;
-                document.getElementById("description").textContent = data.weather[0].description;
-                document.getElementById("temperature").textContent = `温度: ${data.main.temp}°C`;
-                document.getElementById("humidity").textContent = `湿度: ${data.main.humidity}%`;
-                document.getElementById("wind-speed").textContent = `风速: ${data.wind.speed} m/s`;
+                document.getElementById("description").textContent = "天气：" + data.weather[0].description;
+                document.getElementById("temperature").textContent = "温度：" + data.main.temp + "°C";
+                document.getElementById("humidity").textContent = "湿度：" + data.main.humidity + "%";
+                document.getElementById("wind-speed").textContent = "风速：" + data.wind.speed + "m/s";
+                document.getElementById("weather-info").style.display = "block";
 
-                // 动态背景切换
-                const condition = data.weather[0].main.toLowerCase();
-                const weatherInfo = document.getElementById("weather-info");
-                weatherInfo.style.display = "block";
-                document.body.classList.remove("clear", "cloudy", "rainy", "stormy", "snowy", "foggy", "thunderstorm");
+                // 根据天气更换背景
+                const weatherCondition = data.weather[0].main.toLowerCase();
+                const body = document.body;
+                body.className = ""; // 重置class
 
-                if (condition.includes("clear")) {
-                    document.body.classList.add("clear");
-                } else if (condition.includes("cloud")) {
-                    document.body.classList.add("cloudy");
-                } else if (condition.includes("rain")) {
-                    document.body.classList.add("rainy");
-                } else if (condition.includes("storm")) {
-                    document.body.classList.add("stormy");
-                } else if (condition.includes("snow")) {
-                    document.body.classList.add("snowy");
-                } else if (condition.includes("fog")) {
-                    document.body.classList.add("foggy");
-                } else {
-                    document.body.classList.add("thunderstorm");
+                if (weatherCondition.includes("clear")) {
+                    body.classList.add("clear");
+                } else if (weatherCondition.includes("cloud")) {
+                    body.classList.add("cloudy");
+                } else if (weatherCondition.includes("rain")) {
+                    body.classList.add("rainy");
+                } else if (weatherCondition.includes("storm")) {
+                    body.classList.add("stormy");
+                } else if (weatherCondition.includes("snow")) {
+                    body.classList.add("snowy");
+                } else if (weatherCondition.includes("fog")) {
+                    body.classList.add("foggy");
+                } else if (weatherCondition.includes("thunderstorm")) {
+                    body.classList.add("thunderstorm");
                 }
             } catch (error) {
-                alert("获取天气信息失败！");
+                alert("无法获取天气信息，请稍后重试！");
+                console.error(error);
             }
         }
     </script>
