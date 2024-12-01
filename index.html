@@ -1,206 +1,175 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea - AI 聊天助手</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Sea - AI Chat</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
   <style>
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #343541;
-      color: #d1d5db;
+      margin: 0;
+      padding: 0;
+      background: #202123;
+      color: #FFFFFF;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
     }
-
     .chat-container {
+      width: 100%;
+      max-width: 800px;
+      height: 90vh;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      background: #40414f;
+      background: #333333;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
-
-    .header {
+    .chat-header {
+      padding: 20px;
+      background: #444444;
       display: flex;
       align-items: center;
-      padding: 10px 20px;
-      background: #202123;
-      color: white;
+      gap: 15px;
+      font-size: 18px;
+    }
+    .chat-header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .chat-header span {
       font-weight: bold;
     }
-
-    .header img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
     .chat-box {
       flex: 1;
       padding: 20px;
       overflow-y: auto;
+      background: #202123;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      scrollbar-width: thin;
-      background: #343541;
+      gap: 15px;
     }
-
     .chat-box::-webkit-scrollbar {
       width: 8px;
     }
-
     .chat-box::-webkit-scrollbar-thumb {
-      background: #5e5e5e;
+      background: #666;
       border-radius: 4px;
     }
-
     .message {
       display: flex;
-      align-items: flex-start;
       gap: 10px;
-      animation: fadeIn 0.3s ease;
+      align-items: flex-start;
     }
-
     .message.user {
       justify-content: flex-end;
     }
-
-    .message .bubble {
-      max-width: 80%;
+    .message.user .content {
+      background: #007aff;
+      color: #fff;
+    }
+    .message.bot {
+      justify-content: flex-start;
+    }
+    .message .content {
       padding: 10px 15px;
-      border-radius: 12px;
+      border-radius: 8px;
+      max-width: 70%;
       font-size: 14px;
-      line-height: 1.5;
     }
-
-    .message.user .bubble {
-      background: #10a37f;
-      color: white;
-      border-bottom-right-radius: 0;
+    .message.user .content {
+      background: #007aff;
+      color: #fff;
     }
-
-    .message.sea .bubble {
-      background: #444654;
-      color: #e0e0e0;
-      border-bottom-left-radius: 0;
+    .message.bot .content {
+      background: #444444;
+      color: #FFFFFF;
     }
-
-    .message img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-
-    .footer {
+    .chat-input {
+      padding: 10px;
       display: flex;
-      padding: 10px 20px;
-      background: #202123;
+      gap: 10px;
+      background: #444444;
     }
-
-    .footer textarea {
+    .chat-input textarea {
       flex: 1;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 6px;
       border: none;
-      background: #3c3f4a;
-      color: white;
       resize: none;
       outline: none;
       font-size: 14px;
+      color: #fff;
+      background: #202123;
     }
-
-    .footer button {
-      margin-left: 10px;
-      padding: 10px 20px;
-      background: #10a37f;
-      color: white;
+    .chat-input button {
+      padding: 10px 15px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
+      background: #007aff;
+      color: #fff;
       cursor: pointer;
       font-size: 14px;
+      font-weight: bold;
+      transition: background 0.3s ease;
     }
-
-    .footer button:hover {
-      background: #0e8a6e;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .chat-input button:hover {
+      background: #005bb5;
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div class="header">
-      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea">
-      <div>Sea - AI 聊天助手</div>
+    <div class="chat-header">
+      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea Avatar">
+      <span>Sea - AI Chat</span>
     </div>
-    <div class="chat-box" id="chat-box">
-      <div class="message sea">
-        <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="Sea">
-        <div class="bubble">你好！我是 Sea，有什么可以帮你的吗？</div>
-      </div>
-    </div>
-    <div class="footer">
-      <textarea id="user-input" placeholder="输入你的问题..."></textarea>
-      <button onclick="sendMessage()">发送</button>
+    <div class="chat-box" id="chat-box"></div>
+    <div class="chat-input">
+      <textarea id="user-input" placeholder="Type your message here..."></textarea>
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
   <script>
     const chatBox = document.getElementById("chat-box");
     const userInput = document.getElementById("user-input");
 
-    async function query(data) {
-      const response = await fetch(
-        "https://api-inference.huggingface.co/models/openai-community/gpt2",
-        {
-          headers: {
-            Authorization: "Bearer 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",
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        }
-      );
-      const result = await response.json();
-      return result;
-    }
-
+    // 添加消息到聊天框
     function addMessage(content, sender) {
       const messageDiv = document.createElement("div");
       messageDiv.classList.add("message", sender);
 
-      const bubbleDiv = document.createElement("div");
-      bubbleDiv.classList.add("bubble");
-      bubbleDiv.textContent = content;
+      const contentDiv = document.createElement("div");
+      contentDiv.classList.add("content");
+      contentDiv.textContent = content;
 
-      if (sender === "sea") {
-        const avatar = document.createElement("img");
-        avatar.src = "https://i.imgur.com/3IvhwDC.jpeg";
-        messageDiv.appendChild(avatar);
-      }
-      messageDiv.appendChild(bubbleDiv);
+      messageDiv.appendChild(contentDiv);
       chatBox.appendChild(messageDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
+    // 调用 Hugging Face API
+    async function fetchResponse(message) {
+      addMessage("Sea is typing...", "bot");
+      const response = await fetch("https://api-inference.huggingface.co/models/openai-community/gpt2", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer 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",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ inputs: message })
+      });
+
+      const data = await response.json();
+      chatBox.lastChild.remove(); // 移除 "Sea is typing..."
+      return data.generated_text || "I'm sorry, I couldn't process your request.";
+    }
+
+    // 发送消息
     async function sendMessage() {
       const message = userInput.value.trim();
       if (!message) return;
@@ -208,17 +177,8 @@
       addMessage(message, "user");
       userInput.value = "";
 
-      addMessage("正在思考...", "sea");
-
-      try {
-        const response = await query({ inputs: message });
-        const reply = response?.generated_text || "抱歉，我无法理解您的问题。";
-        const lastSeaMessage = chatBox.querySelector(".message.sea .bubble:last-child");
-        lastSeaMessage.textContent = reply;
-      } catch (error) {
-        const lastSeaMessage = chatBox.querySelector(".message.sea .bubble:last-child");
-        lastSeaMessage.textContent = "请求失败，请稍后重试。";
-      }
+      const reply = await fetchResponse(message);
+      addMessage(reply, "bot");
     }
   </script>
 </body>
