@@ -3,247 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sea战斗竞技场</title>
+  <title>Sea 聊天室</title>
   <style>
-    /* 页面样式 */
     body {
+      font-family: "微软雅黑", Arial, sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0a0c1a;
-      color: white;
+      padding: 0;
+      background-color: #f2f2f2;
     }
-
-    .game-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px 20px;
+    .chat-container {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #1a1a2e;
-      color: white;
-      z-index: 1000;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    .developer-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .developer-info img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-
-    .score-board {
-      font-size: 18px;
-    }
-
-    canvas {
-      display: block;
-      margin: 0;
-      background: #10121a;
-    }
-
-    .controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .control-btn {
-      width: 60px;
-      height: 60px;
-      background: #1a1a2e;
-      border: 2px solid white;
-      border-radius: 50%;
-      color: white;
+    .chat-header {
+      background: #4CAF50;
+      color: #fff;
+      padding: 15px;
       text-align: center;
-      line-height: 60px;
-      font-size: 24px;
-      user-select: none;
+      font-size: 20px;
+      font-weight: bold;
     }
-
-    .control-btn:active {
-      background: #00d8ff;
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+    .chat-message {
+      margin: 10px 0;
+      padding: 10px;
+      background: #4CAF50;
+      color: #fff;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    .chat-message.user {
+      background: #007BFF;
+      align-self: flex-end;
+    }
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+      background: #ffffff;
+      border-top: 1px solid #e0e0e0;
+    }
+    .chat-footer input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .chat-footer button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .chat-footer button:hover {
+      background: #45a049;
     }
   </style>
 </head>
 <body>
-  <div class="game-header">
-    <div class="developer-info">
-      <img src="https://i.imgur.com/3IvhwDC.jpeg" alt="开发者头像">
-      <span>开发者：Sea</span>
-    </div>
-    <div class="score-board">
-      分数：<span id="score">0</span>
+  <div class="chat-container">
+    <div class="chat-header">Sea 聊天室</div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-footer">
+      <input type="text" id="message-input" placeholder="请输入消息..." />
+      <button onclick="sendMessage()">发送</button>
     </div>
   </div>
-  <canvas id="gameCanvas"></canvas>
 
-  <!-- 控制按钮 -->
-  <div class="controls">
-    <div class="control-btn" id="up">↑</div>
-    <div class="control-btn" id="left">←</div>
-    <div class="control-btn" id="shoot">射击</div>
-    <div class="control-btn" id="right">→</div>
-    <div class="control-btn" id="down">↓</div>
-  </div>
+  <!-- Firebase 引入 -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
 
   <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    // 适配手机屏幕
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // 游戏变量
-    let score = 0;
-    let isGameOver = false;
-
-    // 玩家对象
-    const player = {
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      size: 30,
-      speed: 5,
-      color: "#00d8ff",
+    // Firebase 配置
+    const firebaseConfig = {
+      apiKey: "AIzaSyCfmqZKkrNbYqOusvZTG-aKSj3fDQvFOmA",
+      authDomain: "seazz-b08af.firebaseapp.com",
+      databaseURL: "https://seazz-b08af-default-rtdb.firebaseio.com",
+      projectId: "seazz-b08af",
+      storageBucket: "seazz-b08af.firebasestorage.app",
+      messagingSenderId: "99112612394",
+      appId: "1:99112612394:web:d32611d8b93c529d26c953",
+      measurementId: "G-1MKRC8M26W"
     };
 
-    // 敌人和子弹
-    const enemies = [];
-    const projectiles = [];
+    // 初始化 Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    // 方向控制状态
-    const controls = { up: false, down: false, left: false, right: false };
+    // 获取用户名
+    let username = prompt("请输入您的用户名：");
 
-    // 事件监听器
-    document.getElementById("up").addEventListener("mousedown", () => (controls.up = true));
-    document.getElementById("down").addEventListener("mousedown", () => (controls.down = true));
-    document.getElementById("left").addEventListener("mousedown", () => (controls.left = true));
-    document.getElementById("right").addEventListener("mousedown", () => (controls.right = true));
-    document.getElementById("shoot").addEventListener("mousedown", fireProjectile);
+    // 监听聊天消息
+    const chatMessages = document.getElementById("chat-messages");
+    const messagesRef = db.ref("messages");
 
-    document.querySelectorAll(".control-btn").forEach((btn) => {
-      btn.addEventListener("mouseup", () => {
-        controls.up = false;
-        controls.down = false;
-        controls.left = false;
-        controls.right = false;
-      });
+    messagesRef.on("child_added", (snapshot) => {
+      const data = snapshot.val();
+      displayMessage(data.message, data.sender, data.timestamp);
     });
 
-    // 开火
-    function fireProjectile() {
-      projectiles.push({
-        x: player.x,
-        y: player.y,
-        size: 5,
-        speed: 8,
-        color: "#00ff00",
-      });
+    // 显示消息
+    function displayMessage(message, sender, timestamp) {
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("chat-message");
+      if (sender === username) {
+        messageDiv.classList.add("user");
+      }
+      messageDiv.innerHTML = `<strong>${sender}</strong>: ${message} <br> <small>${new Date(timestamp).toLocaleString()}</small>`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // 更新游戏
-    function update() {
-      if (isGameOver) return;
+    // 发送消息
+    function sendMessage() {
+      const messageInput = document.getElementById("message-input");
+      const message = messageInput.value.trim();
+      if (message === "") return;
 
-      // 玩家移动
-      if (controls.up && player.y > 0) player.y -= player.speed;
-      if (controls.down && player.y < canvas.height - player.size) player.y += player.speed;
-      if (controls.left && player.x > 0) player.x -= player.speed;
-      if (controls.right && player.x < canvas.width - player.size) player.x += player.speed;
+      const timestamp = Date.now();
 
-      // 子弹移动
-      for (let i = projectiles.length - 1; i >= 0; i--) {
-        projectiles[i].y -= projectiles[i].speed;
-        if (projectiles[i].y < 0) projectiles.splice(i, 1);
-      }
-
-      // 敌人生成
-      if (Math.random() < 0.02) {
-        enemies.push({
-          x: Math.random() * canvas.width,
-          y: -20,
-          size: 20 + Math.random() * 20,
-          color: "#ff5722",
-          speed: 2 + Math.random() * 2,
-        });
-      }
-
-      // 敌人移动
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        enemies[i].y += enemies[i].speed;
-
-        // 检测玩家碰撞
-        if (
-          Math.abs(enemies[i].x - player.x) < player.size &&
-          Math.abs(enemies[i].y - player.y) < player.size
-        ) {
-          isGameOver = true;
-          alert(`游戏结束！最终得分：${score}`);
-          window.location.reload();
-        }
-
-        // 检测子弹碰撞
-        for (let j = projectiles.length - 1; j >= 0; j--) {
-          if (
-            Math.abs(enemies[i].x - projectiles[j].x) < enemies[i].size &&
-            Math.abs(enemies[i].y - projectiles[j].y) < enemies[i].size
-          ) {
-            enemies.splice(i, 1);
-            projectiles.splice(j, 1);
-            score += 10;
-            document.getElementById("score").textContent = score;
-            break;
-          }
-        }
-
-        // 移除屏幕外的敌人
-        if (enemies[i] && enemies[i].y > canvas.height) {
-          enemies.splice(i, 1);
-        }
-      }
-
-      draw();
-    }
-
-    // 绘制
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // 绘制玩家
-      ctx.fillStyle = player.color;
-      ctx.fillRect(player.x - player.size / 2, player.y - player.size / 2, player.size, player.size);
-
-      // 绘制子弹
-      projectiles.forEach((proj) => {
-        ctx.fillStyle = proj.color;
-        ctx.fillRect(proj.x - proj.size / 2, proj.y - proj.size / 2, proj.size, proj.size);
+      // 保存到 Firebase
+      messagesRef.push({
+        message: message,
+        sender: username,
+        timestamp: timestamp
       });
 
-      // 绘制敌人
-      enemies.forEach((enemy) => {
-        ctx.fillStyle = enemy.color;
-        ctx.beginPath();
-        ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      requestAnimationFrame(update);
+      // 清空输入框
+      messageInput.value = "";
     }
-
-    update();
   </script>
 </body>
 </html>
